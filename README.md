@@ -2,7 +2,7 @@
 
 This project consists of developing an interpreter for the **CQL (Comma Query Language)**, a query language inspired by SQL designed to operate on CSV files. The interpreter is implemented in Python using the [PLY (Python Lex-Yacc)](https://www.dabeaz.com/ply/) library.
 > **Academic Context**  
-> This application was developed as part of the “Language Processing” course (Processamento de Linguagens) in the second year of the degree in Computer Systems Engineering (Licenciatura em Engenharia de Sistemas Informáticos, 2024/2025).
+> This application was developed as part of the “Language Processing” course in the second year of the degree in Computer Systems Engineering (Licenciatura em Engenharia de Sistemas Informáticos) at Instituto Politécnico do Cávado e do Ave.
 
 ## 📚 Description
 
