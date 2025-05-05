@@ -1,0 +1,4 @@
+FicheiroCSV:
+-colunas separadas por virgula
+-linhas separadas por nova linha
+
