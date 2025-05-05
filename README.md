@@ -18,7 +18,6 @@ The main goal is to allow users to perform data query and manipulation operation
 
 - [Python 3.x](https://www.python.org/)
 - [PLY (Python Lex-Yacc)](https://www.dabeaz.com/ply/)
-- CSV file manipulation
 
 ## 🚀 How to Run
 
