@@ -28,15 +28,18 @@ class Interpreter:
             self.rename_table(command[1], command[2])
         elif(cmd == "PRINT"):
             self.print_table(command[1])
-
+        elif(cmd == "DISCARD"):
+            self.discard_table(command[1])
     
     def import_table(self, table_name, filename):
         data = self.filesCSV.read_csv(filename)
         if(data):
             self.tablesData[table_name] = data
            
-
     def export_table(self, table_name, filename):
+        if table_name not in self.tablesData:
+            print(f"Table {table_name} does not exist.")
+            return
         self.filesCSV.write_csv(filename, self.tablesData[table_name])
 
     def rename_table(self, table_name, new_name):
@@ -53,6 +56,8 @@ class Interpreter:
         else:
             print(f"Table {table_name} does not exist.")
 
-           
-
-    
+    def discard_table(self, table_name):
+        if table_name in self.tablesData:
+            self.tablesData.pop(table_name)
+        else:
+            print(f"Table {table_name} not found.")    

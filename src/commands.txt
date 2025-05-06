@@ -1,2 +1,3 @@
 IMPORT TABLE estacoes FROM "observacoes.csv"; 
+DISCARD TABLE estacoes;
 EXPORT TABLE estacoes AS "kazzio.csv"; 

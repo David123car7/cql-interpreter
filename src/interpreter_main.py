@@ -1,7 +1,6 @@
 from interpreter import Interpreter
 import sys
 
-
 class Main:
     interpreter = Interpreter()
 

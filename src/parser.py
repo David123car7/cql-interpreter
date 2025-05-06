@@ -20,7 +20,8 @@ class Parser:
         """table_command : import_command
             | export_command
             | rename_command
-            | print_command"""
+            | print_command
+            | discard_command"""
         p[0] = p[1]
 
     def p_import_command(self, p):
@@ -32,6 +33,11 @@ class Parser:
         """export_command : EXPORT TABLE ID AS STRING SEMICOLON"""
         print(f"Exporting table {p[3]} from file {p[5]}")
         p[0] = ("EXPORT", p[3], p[5])
+    
+    def p_discard_command(self, p):
+        """discard_command : DISCARD TABLE ID SEMICOLON"""
+        print(f"Discarding table {p[3]} from program memory")
+        p[0] = ("DISCARD", p[3])
 
     def p_rename_commmand(self, p):
         """rename_command : RENAME TABLE ID STRING SEMICOLON"""
