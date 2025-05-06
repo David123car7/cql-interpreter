@@ -10,8 +10,11 @@ class Parser:
 
     def p_program(self, p):
         """program : table_command
-                   | """
-        p[0] = p[1]
+                   | program table_command"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
 
     def p_table_command(self, p):
         """table_command : import_command

@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "AS EXPORT FROM ID IMPORT STRING TABLEprogram : table_command\n| table_command : import_command\n| export_commandimport_command : IMPORT TABLE ID FROM STRING ';'export_command : EXPORT TABLE ID AS STRING ';'"
+_lr_signature = "AS EXPORT FROM ID IMPORT STRING TABLEprogram : table_command\n| program table_commandtable_command : import_command\n| export_commandimport_command : IMPORT TABLE ID FROM STRING ';'export_command : EXPORT TABLE ID AS STRING ';'"
     
-_lr_action_items = {'$end':([0,1,2,3,4,15,16,],[-2,0,-1,-3,-4,-5,-6,]),'IMPORT':([0,],[5,]),'EXPORT':([0,],[6,]),'TABLE':([5,6,],[7,8,]),'ID':([7,8,],[9,10,]),'FROM':([9,],[11,]),'AS':([10,],[12,]),'STRING':([11,12,],[13,14,]),';':([13,14,],[15,16,]),}
+_lr_action_items = {'IMPORT':([0,1,2,3,4,7,16,17,],[5,5,-1,-3,-4,-2,-5,-6,]),'EXPORT':([0,1,2,3,4,7,16,17,],[6,6,-1,-3,-4,-2,-5,-6,]),'$end':([1,2,3,4,7,16,17,],[0,-1,-3,-4,-2,-5,-6,]),'TABLE':([5,6,],[8,9,]),'ID':([8,9,],[10,11,]),'FROM':([10,],[12,]),'AS':([11,],[13,]),'STRING':([12,13,],[14,15,]),';':([14,15,],[16,17,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'table_command':([0,],[2,]),'import_command':([0,],[3,]),'export_command':([0,],[4,]),}
+_lr_goto_items = {'program':([0,],[1,]),'table_command':([0,1,],[2,7,]),'import_command':([0,1,],[3,3,]),'export_command':([0,1,],[4,4,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -28,7 +28,7 @@ del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
   ('program -> table_command','program',1,'p_program','parser.py',12),
-  ('program -> <empty>','program',0,'p_program','parser.py',13),
+  ('program -> program table_command','program',2,'p_program','parser.py',13),
   ('table_command -> import_command','table_command',1,'p_table_command','parser.py',17),
   ('table_command -> export_command','table_command',1,'p_table_command','parser.py',18),
   ('import_command -> IMPORT TABLE ID FROM STRING ;','import_command',6,'p_import_command','parser.py',22),

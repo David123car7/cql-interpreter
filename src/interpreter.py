@@ -13,8 +13,9 @@ class Interpreter:
         if result is None:
             print("No result from parser")
             return None
-        
-        self.execute(result)
+
+        for cmd in result:
+            self.execute(cmd)
     
     def execute(self, command):
         cmd = command[0]
