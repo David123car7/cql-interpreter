@@ -1,15 +1,11 @@
-# main.py
-
-from interpreter import load_observacoes
+from files import load_file
 
 def main():
-    data = load_observacoes("observacoes.csv")
-    # agora 'data' está disponível para o teu lexer/parser/interpreter
-    print("Dados carregados:", data)
+    dados = load_file("estacoes.csv")
+    print("Dados carregados com sucesso!")
 
-    # exemplo de uso: processar cada linha
-    for row in data:
-        print("Linha:", row)
+    for linha in dados:
+        print(linha)
 
 if __name__ == "__main__":
     main()
