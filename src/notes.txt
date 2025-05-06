@@ -1,3 +1,6 @@
+Python:
+-self refers to the current instance of the class.
+
 FicheiroCSV:
 -colunas separadas por virgula
 -linhas separadas por nova linha
