@@ -1,8 +1,53 @@
 import ply.lex as plex
 
 class Lexer:
-    tokens  = ['ID', 'STRING', 'IMPORT', 'TABLE', 'FROM']
-    literals = [',', ';']
+    reserved = {
+        'import': 'IMPORT',
+        'table': 'TABLE',
+        'from': 'FROM',
+        'export': 'EXPORT',
+        'discard': 'DISCARD',
+        'rename': 'RENAME',
+        'print': 'PRINT',
+        'select': 'SELECT',
+        'create': 'CREATE',
+        'where': 'WHERE',
+        'and': 'AND',
+        'limit': 'LIMIT',
+        'join': 'JOIN',
+        'using': 'USING',
+        'call': 'CALL',
+        'as': 'AS',
+        'procedure': 'PROCEDURE',
+        'end': 'END',
+    }
+    tokens  = [
+        'ID',
+        'STRING'
+        'COMMA',
+        'SEMICOLON',
+        'NUMBER',
+        'EQUALS',
+        'NOT_EQUALS',
+        'LESS_THAN',
+        'LESS_EQUALS',
+        'GREATER_THAN',
+        'GREATER_EQUALS',
+        'COMMENT',
+        'COMMENTS',
+        'ASTERISK',
+        ] + list(reserved.values())
+    
+    t_COMMA = r','
+    t_SEMICOLON = r';'
+    t_EQUALS = r'='
+    t_NOT_EQUALS = r'<>'
+    t_LESS_THAN = r'<'
+    t_LESS_EQUALS = r'<='
+    t_GREATER_THAN = r'>'
+    t_GREATER_EQUALS = r'>='
+    t_ASTERISK = r'\*'
+
     t_ignore = ' \t\n'
 
     def build(self, **kwargs):
@@ -12,18 +57,6 @@ class Lexer:
     def input(self, data):
         self.lexer.input(data)
 
-    def t_IMPORT(self, t):
-        r'IMPORT'
-        return t
-    
-    def t_TABLE(self, t):
-        r'TABLE'
-        return t
-    
-    def t_FROM(self, t):
-        r'FROM'
-        return t 
-
     def t_ID(self, t):
         r'[A-Za-z_][A-Za-z0-9_]*'
         return t
@@ -32,6 +65,19 @@ class Lexer:
         r'\"([^\\\"]|\\.)*\"'
         t.value = t.value[1:-1]
         return t
+    
+    def t_NUMBER(self, t):
+        r"\d+"
+        t.value = int(t.value)
+        return t
+
+    def t_COMMENT(t):
+        r'--.*'
+        pass
+
+    def t_COMMENTS(t):
+        r'-(.|\n)-'
+        pass
 
     def t_error(self, t):
         print(f"Illegal character '{t.value[0]}'")
