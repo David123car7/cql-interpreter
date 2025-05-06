@@ -10,7 +10,9 @@ class Parser:
 
     def p_program(self, p):
         """program : table_command 
-                   | program table_command"""
+                   | program table_command
+                   | query_command
+                   | program query_command"""
         if len(p) == 2:
             p[0] = [p[1]]
         else:
@@ -24,6 +26,11 @@ class Parser:
             | discard_command"""
         p[0] = p[1]
 
+    def p_query_command(self, p):
+        """query_command : selectAll_command"""
+        p[0] = p[1]
+    
+    #Table commands
     def p_import_command(self, p):
         """import_command : IMPORT TABLE ID FROM STRING SEMICOLON"""
         print(f"Importing table {p[3]} from file {p[5]}")
@@ -48,6 +55,12 @@ class Parser:
         """print_command : PRINT TABLE ID SEMICOLON"""
         print(f"Printing table {p[3]}")
         p[0] = ("PRINT", p[3])
+
+    #Query commands
+    def p_selectAll_command(self, p):
+        """selectAll_command : SELECT ASTERISK FROM ID SEMICOLON"""
+        print(f"Selecting all data from table {p[4]}")
+        p[0] = ("SELECT", p[4])
 
     def p_error(self, p):
         if p:

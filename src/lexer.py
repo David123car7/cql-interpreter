@@ -21,6 +21,7 @@ class Lexer:
         'procedure': 'PROCEDURE',
         'end': 'END',
     }
+    
     tokens  = [
         'ID',
         'STRING',
