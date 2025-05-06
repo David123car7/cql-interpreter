@@ -29,6 +29,5 @@ class Parser:
         else:
             print("Syntax error at EOF")
 
-    # Método de parsing
     def parse(self, data):
         return self.parser.parse(data, lexer=self.lexer.lexer)
