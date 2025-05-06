@@ -1,4 +1,3 @@
 IMPORT TABLE observacoes FROM "observacoes.csv";
-SELECT DataHoraObservacao FROM observacoes; 
-EXPORT TABLE observacoes AS "output/export.csv"; 
-DISCARD TABLE observacoes;
+SELECT Id,Humidade FROM observacoes; 
+

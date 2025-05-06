@@ -32,6 +32,8 @@ class Interpreter:
             self.discard_table(command[1])
         elif(cmd == "SELECT"):
             self.select_table(command[1])
+        elif(cmd == "SELECT_SPECIFIC"):
+            self.select_specific(command[2], command[1])
     
     def import_table(self, table_name, filename):
         data = self.filesCSV.read_csv(self.filePath + filename)
@@ -77,10 +79,34 @@ class Interpreter:
         rows = data.get("data", [])
 
         print("Table:", table_name)
-        print("Header:", header)
-        print("Rows:")
+        print(header)
         for row in rows:
             print(row)
         return data
-            
+    
+    def select_specific(self, table_name,columns):
+        if table_name == "":
+            print("Table name is empty")
+            return None
+        if table_name not in self.tablesData:
+            print(f"Table {table_name} does not exist.")
+            return None         
+        data = self.tablesData.get(table_name)
+        header = data.get("header")
+        rows = data.get("data")
+
+        for column in columns:
+            if column not in header:
+                print(f"Column {column} does not exist in table {table_name}.")
+                return None
+
+        # Get the indices of the columns to select
+        column_indices = [header.index(col) for col in columns]
+  
+        print(columns)
+
+        for row in rows:
+            selected_row = [row[i] for i in column_indices]
+            print(selected_row)
+        
 
