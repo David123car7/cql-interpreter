@@ -27,7 +27,8 @@ class Parser:
         p[0] = p[1]
 
     def p_query_command(self, p):
-        """query_command : selectAll_command"""
+        """query_command : selectAll_command
+            | select_specific"""
         p[0] = p[1]
     
     #Table commands
@@ -61,6 +62,19 @@ class Parser:
         """selectAll_command : SELECT ASTERISK FROM ID SEMICOLON"""
         print(f"Selecting all data from table {p[4]}")
         p[0] = ("SELECT", p[4])
+    
+    def p_select_specific(self, p):
+        "select_specific : SELECT select_list FROM ID SEMICOLON"
+        print(f"Selecting {p[2]} from table {p[4]}")
+        p[0] = ("SELECT_SPECIFIC", p[2], p[4])
+
+    def p_select_list_multi(self, p):
+        "select_list : select_list COMMA ID"
+        p[0] = p[1] + [p[3]]
+
+    def p_select_list_single(self, p):
+        "select_list : ID"
+        p[0] = [p[1]]
 
     def p_error(self, p):
         if p:

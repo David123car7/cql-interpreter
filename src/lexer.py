@@ -39,6 +39,7 @@ class Lexer:
         'ASTERISK',
         ] + list(reserved.values())
     
+    t_COMMA = r','
     t_SEMICOLON = r';'
     t_EQUALS = r'='
     t_NOT_EQUALS = r'<>'

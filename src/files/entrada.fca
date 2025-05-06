@@ -1,3 +1,4 @@
-IMPORT TABLE estacoes FROM "estacoes.csv";
-EXPORT TABLE estacoes AS "output/export.csv"; 
-DISCARD TABLE estacoes;
+IMPORT TABLE observacoes FROM "observacoes.csv";
+SELECT DataHoraObservacao FROM observacoes; 
+EXPORT TABLE observacoes AS "output/export.csv"; 
+DISCARD TABLE observacoes;
