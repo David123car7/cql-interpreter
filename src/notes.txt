@@ -1,5 +1,7 @@
 Python:
 -self refers to the current instance of the class.
+-def __init__(self): Isso é chamado sempre que for criado uma instancia da classe, logo isso serve para inicializar a mesma 
+
 
 FicheiroCSV:
 -colunas separadas por virgula

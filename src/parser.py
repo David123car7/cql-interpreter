@@ -10,12 +10,15 @@ class Parser:
 
     def p_program(self, p):
         """program : table_command
-                   | """
-        p[0] = p[1]
+                   | program table_command"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
 
     def p_table_command(self, p):
         """table_command : import_command
-            | """
+            | export_command"""
         p[0] = p[1]
 
     def p_import_command(self, p):
@@ -23,12 +26,16 @@ class Parser:
         print(f"Importing table {p[3]} from file {p[5]}")
         p[0] = ("IMPORT", p[3], p[5])
 
+    def p_export_command(self, p):
+        """export_command : EXPORT TABLE ID AS STRING ';'"""
+        print(f"Exporting table {p[3]} from file {p[5]}")
+        p[0] = ("EXPORT", p[3], p[5])
+
     def p_error(self, p):
         if p:
             print(f"Syntax error at {p.value!r}")
         else:
             print("Syntax error at EOF")
 
-    # Método de parsing
     def parse(self, data):
         return self.parser.parse(data, lexer=self.lexer.lexer)

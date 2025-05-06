@@ -4,26 +4,30 @@ Grammar
 
 Rule 0     S' -> program
 Rule 1     program -> table_command
-Rule 2     program -> <empty>
+Rule 2     program -> program table_command
 Rule 3     table_command -> import_command
-Rule 4     table_command -> <empty>
+Rule 4     table_command -> export_command
 Rule 5     import_command -> IMPORT TABLE ID FROM STRING ;
+Rule 6     export_command -> EXPORT TABLE ID AS STRING ;
 
 Terminals, with rules where they appear
 
-;                    : 5
+;                    : 5 6
+AS                   : 6
+EXPORT               : 6
 FROM                 : 5
-ID                   : 5
+ID                   : 5 6
 IMPORT               : 5
-STRING               : 5
-TABLE                : 5
+STRING               : 5 6
+TABLE                : 5 6
 error                : 
 
 Nonterminals, with rules where they appear
 
+export_command       : 4
 import_command       : 3
-program              : 0
-table_command        : 1
+program              : 2 0
+table_command        : 1 2
 
 Parsing method: LALR
 
@@ -31,31 +35,42 @@ state 0
 
     (0) S' -> . program
     (1) program -> . table_command
-    (2) program -> .
+    (2) program -> . program table_command
     (3) table_command -> . import_command
-    (4) table_command -> .
+    (4) table_command -> . export_command
     (5) import_command -> . IMPORT TABLE ID FROM STRING ;
+    (6) export_command -> . EXPORT TABLE ID AS STRING ;
 
-  ! reduce/reduce conflict for $end resolved using rule 2 (program -> .)
-    $end            reduce using rule 2 (program -> .)
-    IMPORT          shift and go to state 4
-
-  ! $end            [ reduce using rule 4 (table_command -> .) ]
+    IMPORT          shift and go to state 5
+    EXPORT          shift and go to state 6
 
     program                        shift and go to state 1
     table_command                  shift and go to state 2
     import_command                 shift and go to state 3
+    export_command                 shift and go to state 4
 
 state 1
 
     (0) S' -> program .
+    (2) program -> program . table_command
+    (3) table_command -> . import_command
+    (4) table_command -> . export_command
+    (5) import_command -> . IMPORT TABLE ID FROM STRING ;
+    (6) export_command -> . EXPORT TABLE ID AS STRING ;
 
+    IMPORT          shift and go to state 5
+    EXPORT          shift and go to state 6
 
+    table_command                  shift and go to state 7
+    import_command                 shift and go to state 3
+    export_command                 shift and go to state 4
 
 state 2
 
     (1) program -> table_command .
 
+    IMPORT          reduce using rule 1 (program -> table_command .)
+    EXPORT          reduce using rule 1 (program -> table_command .)
     $end            reduce using rule 1 (program -> table_command .)
 
 
@@ -63,53 +78,113 @@ state 3
 
     (3) table_command -> import_command .
 
+    IMPORT          reduce using rule 3 (table_command -> import_command .)
+    EXPORT          reduce using rule 3 (table_command -> import_command .)
     $end            reduce using rule 3 (table_command -> import_command .)
 
 
 state 4
 
-    (5) import_command -> IMPORT . TABLE ID FROM STRING ;
+    (4) table_command -> export_command .
 
-    TABLE           shift and go to state 5
+    IMPORT          reduce using rule 4 (table_command -> export_command .)
+    EXPORT          reduce using rule 4 (table_command -> export_command .)
+    $end            reduce using rule 4 (table_command -> export_command .)
 
 
 state 5
 
-    (5) import_command -> IMPORT TABLE . ID FROM STRING ;
+    (5) import_command -> IMPORT . TABLE ID FROM STRING ;
 
-    ID              shift and go to state 6
+    TABLE           shift and go to state 8
 
 
 state 6
 
-    (5) import_command -> IMPORT TABLE ID . FROM STRING ;
+    (6) export_command -> EXPORT . TABLE ID AS STRING ;
 
-    FROM            shift and go to state 7
+    TABLE           shift and go to state 9
 
 
 state 7
 
-    (5) import_command -> IMPORT TABLE ID FROM . STRING ;
+    (2) program -> program table_command .
 
-    STRING          shift and go to state 8
+    IMPORT          reduce using rule 2 (program -> program table_command .)
+    EXPORT          reduce using rule 2 (program -> program table_command .)
+    $end            reduce using rule 2 (program -> program table_command .)
 
 
 state 8
 
-    (5) import_command -> IMPORT TABLE ID FROM STRING . ;
+    (5) import_command -> IMPORT TABLE . ID FROM STRING ;
 
-    ;               shift and go to state 9
+    ID              shift and go to state 10
 
 
 state 9
 
+    (6) export_command -> EXPORT TABLE . ID AS STRING ;
+
+    ID              shift and go to state 11
+
+
+state 10
+
+    (5) import_command -> IMPORT TABLE ID . FROM STRING ;
+
+    FROM            shift and go to state 12
+
+
+state 11
+
+    (6) export_command -> EXPORT TABLE ID . AS STRING ;
+
+    AS              shift and go to state 13
+
+
+state 12
+
+    (5) import_command -> IMPORT TABLE ID FROM . STRING ;
+
+    STRING          shift and go to state 14
+
+
+state 13
+
+    (6) export_command -> EXPORT TABLE ID AS . STRING ;
+
+    STRING          shift and go to state 15
+
+
+state 14
+
+    (5) import_command -> IMPORT TABLE ID FROM STRING . ;
+
+    ;               shift and go to state 16
+
+
+state 15
+
+    (6) export_command -> EXPORT TABLE ID AS STRING . ;
+
+    ;               shift and go to state 17
+
+
+state 16
+
     (5) import_command -> IMPORT TABLE ID FROM STRING ; .
 
+    IMPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING ; .)
+    EXPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING ; .)
     $end            reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING ; .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: reduce/reduce conflict in state 0 resolved using rule (program -> <empty>)
-WARNING: rejected rule (table_command -> <empty>) in state 0
-WARNING: Rule (table_command -> <empty>) is never reduced
+
+state 17
+
+    (6) export_command -> EXPORT TABLE ID AS STRING ; .
+
+    IMPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING ; .)
+    EXPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING ; .)
+    $end            reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING ; .)
+
