@@ -32,9 +32,14 @@ The main goal is to allow users to perform data query and manipulation operation
    ```bash
    pip install ply
    
-3. **Run the interpreter:**
+3. **Run the interpreter No File:**
    
       ```bash
-   to do
+   python interpreter.py
+
+4. **Run the interpreter With File:**
+   
+      ```bash
+   python interpreter.py sample.csv
 
 
