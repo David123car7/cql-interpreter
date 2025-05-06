@@ -40,6 +40,6 @@ The main goal is to allow users to perform data query and manipulation operation
 4. **Run the interpreter With File:**
    
       ```bash
-   python interpreter.py sample.csv
+   python interpreter.py entrada.fca
 
 
