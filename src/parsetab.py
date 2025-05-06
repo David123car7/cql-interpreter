@@ -6,7 +6,7 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "FROM ID IMPORT STRING TABLEprogram : table_command\n| table_command : import_command\n| import_command : IMPORT TABLE ID FROM STRING ';'"
+_lr_signature = "FROM ID IMPORT STRING TABLEprogram : table_command\n                   | table_command : import_command\n            | import_command : IMPORT TABLE ID FROM STRING ';'"
     
 _lr_action_items = {'$end':([0,1,2,3,9,],[-2,0,-1,-3,-5,]),'IMPORT':([0,],[4,]),'TABLE':([4,],[5,]),'ID':([5,],[6,]),'FROM':([6,],[7,]),'STRING':([7,],[8,]),';':([8,],[9,]),}
 
