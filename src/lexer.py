@@ -23,7 +23,7 @@ class Lexer:
     }
     tokens  = [
         'ID',
-        'STRING'
+        'STRING',
         'COMMA',
         'SEMICOLON',
         'NUMBER',
@@ -38,7 +38,6 @@ class Lexer:
         'ASTERISK',
         ] + list(reserved.values())
     
-    t_COMMA = r','
     t_SEMICOLON = r';'
     t_EQUALS = r'='
     t_NOT_EQUALS = r'<>'
@@ -59,8 +58,9 @@ class Lexer:
 
     def t_ID(self, t):
         r'[A-Za-z_][A-Za-z0-9_]*'
+        t.type = self.reserved.get(t.value.lower(), "ID")
         return t
-
+    
     def t_STRING(self, t):
         r'\"([^\\\"]|\\.)*\"'
         t.value = t.value[1:-1]
@@ -71,11 +71,11 @@ class Lexer:
         t.value = int(t.value)
         return t
 
-    def t_COMMENT(t):
+    def t_COMMENT(self,t):
         r'--.*'
         pass
 
-    def t_COMMENTS(t):
+    def t_COMMENTS(self, t):
         r'-(.|\n)-'
         pass
 

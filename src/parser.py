@@ -9,7 +9,7 @@ class Parser:
         self.parser = yacc.yacc(module=self)
 
     def p_program(self, p):
-        """program : table_command
+        """program : table_command 
                    | program table_command"""
         if len(p) == 2:
             p[0] = [p[1]]
@@ -22,12 +22,12 @@ class Parser:
         p[0] = p[1]
 
     def p_import_command(self, p):
-        """import_command : IMPORT TABLE ID FROM STRING ';'"""
+        """import_command : IMPORT TABLE ID FROM STRING SEMICOLON"""
         print(f"Importing table {p[3]} from file {p[5]}")
         p[0] = ("IMPORT", p[3], p[5])
 
     def p_export_command(self, p):
-        """export_command : EXPORT TABLE ID AS STRING ';'"""
+        """export_command : EXPORT TABLE ID AS STRING SEMICOLON"""
         print(f"Exporting table {p[3]} from file {p[5]}")
         p[0] = ("EXPORT", p[3], p[5])
 

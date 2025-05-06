@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "AS EXPORT FROM ID IMPORT STRING TABLEprogram : table_command\n| program table_commandtable_command : import_command\n| export_commandimport_command : IMPORT TABLE ID FROM STRING ';'export_command : EXPORT TABLE ID AS STRING ';'"
+_lr_signature = 'AND AS ASTERISK CALL COMMA COMMENT COMMENTS CREATE DISCARD END EQUALS EXPORT FROM GREATER_EQUALS GREATER_THAN ID IMPORT JOIN LESS_EQUALS LESS_THAN LIMIT NOT_EQUALS NUMBER PRINT PROCEDURE RENAME SELECT SEMICOLON STRING TABLE USING WHEREprogram : table_command \n| program table_commandtable_command : import_command\n| export_commandimport_command : IMPORT TABLE ID FROM STRING SEMICOLONexport_command : EXPORT TABLE ID AS STRING SEMICOLON'
     
-_lr_action_items = {'IMPORT':([0,1,2,3,4,7,16,17,],[5,5,-1,-3,-4,-2,-5,-6,]),'EXPORT':([0,1,2,3,4,7,16,17,],[6,6,-1,-3,-4,-2,-5,-6,]),'$end':([1,2,3,4,7,16,17,],[0,-1,-3,-4,-2,-5,-6,]),'TABLE':([5,6,],[8,9,]),'ID':([8,9,],[10,11,]),'FROM':([10,],[12,]),'AS':([11,],[13,]),'STRING':([12,13,],[14,15,]),';':([14,15,],[16,17,]),}
+_lr_action_items = {'IMPORT':([0,1,2,3,4,7,16,17,],[5,5,-1,-3,-4,-2,-5,-6,]),'EXPORT':([0,1,2,3,4,7,16,17,],[6,6,-1,-3,-4,-2,-5,-6,]),'$end':([1,2,3,4,7,16,17,],[0,-1,-3,-4,-2,-5,-6,]),'TABLE':([5,6,],[8,9,]),'ID':([8,9,],[10,11,]),'FROM':([10,],[12,]),'AS':([11,],[13,]),'STRING':([12,13,],[14,15,]),'SEMICOLON':([14,15,],[16,17,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -29,8 +29,8 @@ _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
   ('program -> table_command','program',1,'p_program','parser.py',12),
   ('program -> program table_command','program',2,'p_program','parser.py',13),
-  ('table_command -> import_command','table_command',1,'p_table_command','parser.py',17),
-  ('table_command -> export_command','table_command',1,'p_table_command','parser.py',18),
-  ('import_command -> IMPORT TABLE ID FROM STRING ;','import_command',6,'p_import_command','parser.py',22),
-  ('export_command -> EXPORT TABLE ID AS STRING ;','export_command',6,'p_export_command','parser.py',27),
+  ('table_command -> import_command','table_command',1,'p_table_command','parser.py',20),
+  ('table_command -> export_command','table_command',1,'p_table_command','parser.py',21),
+  ('import_command -> IMPORT TABLE ID FROM STRING SEMICOLON','import_command',6,'p_import_command','parser.py',25),
+  ('export_command -> EXPORT TABLE ID AS STRING SEMICOLON','export_command',6,'p_export_command','parser.py',30),
 ]

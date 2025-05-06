@@ -1,5 +1,32 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    AND
+    ASTERISK
+    CALL
+    COMMA
+    COMMENT
+    COMMENTS
+    CREATE
+    DISCARD
+    END
+    EQUALS
+    GREATER_EQUALS
+    GREATER_THAN
+    JOIN
+    LESS_EQUALS
+    LESS_THAN
+    LIMIT
+    NOT_EQUALS
+    NUMBER
+    PRINT
+    PROCEDURE
+    RENAME
+    SELECT
+    USING
+    WHERE
+
 Grammar
 
 Rule 0     S' -> program
@@ -7,19 +34,43 @@ Rule 1     program -> table_command
 Rule 2     program -> program table_command
 Rule 3     table_command -> import_command
 Rule 4     table_command -> export_command
-Rule 5     import_command -> IMPORT TABLE ID FROM STRING ;
-Rule 6     export_command -> EXPORT TABLE ID AS STRING ;
+Rule 5     import_command -> IMPORT TABLE ID FROM STRING SEMICOLON
+Rule 6     export_command -> EXPORT TABLE ID AS STRING SEMICOLON
 
 Terminals, with rules where they appear
 
-;                    : 5 6
+AND                  : 
 AS                   : 6
+ASTERISK             : 
+CALL                 : 
+COMMA                : 
+COMMENT              : 
+COMMENTS             : 
+CREATE               : 
+DISCARD              : 
+END                  : 
+EQUALS               : 
 EXPORT               : 6
 FROM                 : 5
+GREATER_EQUALS       : 
+GREATER_THAN         : 
 ID                   : 5 6
 IMPORT               : 5
+JOIN                 : 
+LESS_EQUALS          : 
+LESS_THAN            : 
+LIMIT                : 
+NOT_EQUALS           : 
+NUMBER               : 
+PRINT                : 
+PROCEDURE            : 
+RENAME               : 
+SELECT               : 
+SEMICOLON            : 5 6
 STRING               : 5 6
 TABLE                : 5 6
+USING                : 
+WHERE                : 
 error                : 
 
 Nonterminals, with rules where they appear
@@ -38,8 +89,8 @@ state 0
     (2) program -> . program table_command
     (3) table_command -> . import_command
     (4) table_command -> . export_command
-    (5) import_command -> . IMPORT TABLE ID FROM STRING ;
-    (6) export_command -> . EXPORT TABLE ID AS STRING ;
+    (5) import_command -> . IMPORT TABLE ID FROM STRING SEMICOLON
+    (6) export_command -> . EXPORT TABLE ID AS STRING SEMICOLON
 
     IMPORT          shift and go to state 5
     EXPORT          shift and go to state 6
@@ -55,8 +106,8 @@ state 1
     (2) program -> program . table_command
     (3) table_command -> . import_command
     (4) table_command -> . export_command
-    (5) import_command -> . IMPORT TABLE ID FROM STRING ;
-    (6) export_command -> . EXPORT TABLE ID AS STRING ;
+    (5) import_command -> . IMPORT TABLE ID FROM STRING SEMICOLON
+    (6) export_command -> . EXPORT TABLE ID AS STRING SEMICOLON
 
     IMPORT          shift and go to state 5
     EXPORT          shift and go to state 6
@@ -94,14 +145,14 @@ state 4
 
 state 5
 
-    (5) import_command -> IMPORT . TABLE ID FROM STRING ;
+    (5) import_command -> IMPORT . TABLE ID FROM STRING SEMICOLON
 
     TABLE           shift and go to state 8
 
 
 state 6
 
-    (6) export_command -> EXPORT . TABLE ID AS STRING ;
+    (6) export_command -> EXPORT . TABLE ID AS STRING SEMICOLON
 
     TABLE           shift and go to state 9
 
@@ -117,74 +168,74 @@ state 7
 
 state 8
 
-    (5) import_command -> IMPORT TABLE . ID FROM STRING ;
+    (5) import_command -> IMPORT TABLE . ID FROM STRING SEMICOLON
 
     ID              shift and go to state 10
 
 
 state 9
 
-    (6) export_command -> EXPORT TABLE . ID AS STRING ;
+    (6) export_command -> EXPORT TABLE . ID AS STRING SEMICOLON
 
     ID              shift and go to state 11
 
 
 state 10
 
-    (5) import_command -> IMPORT TABLE ID . FROM STRING ;
+    (5) import_command -> IMPORT TABLE ID . FROM STRING SEMICOLON
 
     FROM            shift and go to state 12
 
 
 state 11
 
-    (6) export_command -> EXPORT TABLE ID . AS STRING ;
+    (6) export_command -> EXPORT TABLE ID . AS STRING SEMICOLON
 
     AS              shift and go to state 13
 
 
 state 12
 
-    (5) import_command -> IMPORT TABLE ID FROM . STRING ;
+    (5) import_command -> IMPORT TABLE ID FROM . STRING SEMICOLON
 
     STRING          shift and go to state 14
 
 
 state 13
 
-    (6) export_command -> EXPORT TABLE ID AS . STRING ;
+    (6) export_command -> EXPORT TABLE ID AS . STRING SEMICOLON
 
     STRING          shift and go to state 15
 
 
 state 14
 
-    (5) import_command -> IMPORT TABLE ID FROM STRING . ;
+    (5) import_command -> IMPORT TABLE ID FROM STRING . SEMICOLON
 
-    ;               shift and go to state 16
+    SEMICOLON       shift and go to state 16
 
 
 state 15
 
-    (6) export_command -> EXPORT TABLE ID AS STRING . ;
+    (6) export_command -> EXPORT TABLE ID AS STRING . SEMICOLON
 
-    ;               shift and go to state 17
+    SEMICOLON       shift and go to state 17
 
 
 state 16
 
-    (5) import_command -> IMPORT TABLE ID FROM STRING ; .
+    (5) import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .
 
-    IMPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING ; .)
-    EXPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING ; .)
-    $end            reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING ; .)
+    IMPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+    EXPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+    $end            reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
 
 
 state 17
 
-    (6) export_command -> EXPORT TABLE ID AS STRING ; .
+    (6) export_command -> EXPORT TABLE ID AS STRING SEMICOLON .
 
-    IMPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING ; .)
-    EXPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING ; .)
-    $end            reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING ; .)
+    IMPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
+    EXPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
+    $end            reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
 
