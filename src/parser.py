@@ -28,7 +28,8 @@ class Parser:
 
     def p_query_command(self, p):
         """query_command : selectAll_command
-            | select_specific"""
+            | select_specific
+            | select_where_command"""
         p[0] = p[1]
     
     #Table commands
@@ -67,7 +68,30 @@ class Parser:
         "select_specific : SELECT select_list FROM ID SEMICOLON"
         print(f"Selecting {p[2]} from table {p[4]}")
         p[0] = ("SELECT_SPECIFIC", p[2], p[4])
+    
+    def p_select_where_command(self, p):
+        """select_where_command : SELECT select_list FROM ID WHERE condition SEMICOLON"""
+        p[0] = ("SELECT_WHERE", p[2], p[4], p[6])
 
+    def p_condition(self, p):
+        """condition : ID EQUALS value
+        | ID NOT_EQUALS value
+        | ID LESS_THAN value
+        | ID GREATER_THAN value
+        | ID LESS_EQUALS value
+        | ID GREATER_EQUALS value
+        | condition AND condition"""
+        if len(p) == 4 and p[2] != "AND":
+            p[0] = ("CONDITION", p[1], p[2], p[3])
+        elif len(p) == 4 and p[2] == "AND":
+            p[0] = ("AND", p[1], p[3])
+
+    def p_value(self, p):
+        """value : ID
+        | STRING
+        | NUMBER"""
+        p[0] = p[1]
+    
     def p_select_list_multi(self, p):
         "select_list : select_list COMMA ID"
         p[0] = p[1] + [p[3]]
