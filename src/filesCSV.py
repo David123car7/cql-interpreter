@@ -1,7 +1,6 @@
 import csv
 
-class Files:
-    
+class FilesCSV:
     def read_csv(self, filename):
                 if(filename == ""):
                     print("Filename is empty")

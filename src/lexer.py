@@ -1,7 +1,7 @@
 import ply.lex as plex
 
 class Lexer:
-    tokens  = ['ID', 'STRING', 'IMPORT', 'TABLE', 'FROM']
+    tokens  = ['ID', 'STRING', 'IMPORT', 'EXPORT','TABLE', 'FROM', 'AS']
     literals = [',', ';']
     t_ignore = ' \t\n'
 
@@ -14,6 +14,14 @@ class Lexer:
 
     def t_IMPORT(self, t):
         r'IMPORT'
+        return t
+    
+    def t_EXPORT(self, t):
+        r'EXPORT'
+        return t
+    
+    def t_AS(self, t):
+        r'AS'
         return t
     
     def t_TABLE(self, t):
