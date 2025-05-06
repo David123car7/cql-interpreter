@@ -30,10 +30,13 @@ class Interpreter:
             self.print_table(command[1])
         elif(cmd == "DISCARD"):
             self.discard_table(command[1])
-        elif(cmd == "SELECT"):
+        elif(cmd == "SELECT_NO_LIMIT"):
             self.select_table(command[1])
-        elif(cmd == "SELECT_SPECIFIC"):
+        elif(cmd == "SELECT_SPECIFIC_NO_LIMIT"):
             self.select_specific(command[2], command[1])
+        elif(cmd == "SELECT_WHERE"):
+            print("SELECT_WHERE")
+            
     
     def import_table(self, table_name, filename):
         data = self.filesCSV.read_csv(self.filePath + filename)

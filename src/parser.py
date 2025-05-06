@@ -60,18 +60,49 @@ class Parser:
 
     #Query commands
     def p_selectAll_command(self, p):
-        """selectAll_command : SELECT ASTERISK FROM ID SEMICOLON"""
+        """selectAll_command : selectAll_command_no_limit
+        | selectAll_command_limit"""
+        p[0] = p[1]
+    
+    def p_selectAll_command_no_limit(self, p):
+        """selectAll_command_no_limit : SELECT ASTERISK FROM ID SEMICOLON"""
         print(f"Selecting all data from table {p[4]}")
-        p[0] = ("SELECT", p[4])
+        p[0] = ("SELECT_NO_LIMIT", p[4])
+
+    def p_selectAll_command_limit(self, p):
+        """selectAll_command_limit : SELECT ASTERISK FROM ID LIMIT NUMBER SEMICOLON"""
+        print(f"Selecting all data from table {p[4]} with limit {p[6]}")
+        p[0] = ("SELECT_LIMIT", p[4])
     
     def p_select_specific(self, p):
-        "select_specific : SELECT select_list FROM ID SEMICOLON"
+        """select_specific : select_specific_no_limit
+        | select_specific_limit"""
+        p[0] = p[1]
+
+    def p_select_specific_no_limit(self, p):
+        """select_specific_no_limit : SELECT select_list FROM ID SEMICOLON"""
         print(f"Selecting {p[2]} from table {p[4]}")
-        p[0] = ("SELECT_SPECIFIC", p[2], p[4])
+        p[0] = ("SELECT_SPECIFIC_NO_LIMIT", p[2], p[4])
+
+    def p_select_specific_limit(self, p):
+        """select_specific_limit : SELECT select_list FROM ID LIMIT NUMBER SEMICOLON"""
+        print(f"Selecting {p[2]} from table {p[4]} with limit {p[6]}")
+        p[0] = ("SELECT_SPECIFIC_LIMIT", p[2], p[4])
     
     def p_select_where_command(self, p):
-        """select_where_command : SELECT select_list FROM ID WHERE condition SEMICOLON"""
-        p[0] = ("SELECT_WHERE", p[2], p[4], p[6])
+        """select_where_command : select_where_command_no_limit
+        | select_where_command_limit"""
+        p[0] = p[1]
+
+    def p_select_where_command_no_limit(self, p):
+        """select_where_command_no_limit : SELECT ASTERISK FROM ID WHERE condition SEMICOLON"""
+        print(f"Selecting all data from table {p[4]} where {p[6]}")
+        p[0] = ("SELECT_WHERE_NO_LIMIT", p[4], p[6])
+
+    def p_select_where_command_limit(self, p):
+        """select_where_command_limit : SELECT ASTERISK FROM ID WHERE condition LIMIT NUMBER SEMICOLON"""
+        print(f"Selecting all data from table {p[4]} where {p[6]} with limit {p[8]}")
+        p[0] = ("SELECT_WHERE_LIMIT", p[4], p[6], p[8])
 
     def p_condition(self, p):
         """condition : ID EQUALS value
@@ -87,8 +118,7 @@ class Parser:
             p[0] = ("AND", p[1], p[3])
 
     def p_value(self, p):
-        """value : ID
-        | STRING
+        """value : STRING
         | NUMBER"""
         p[0] = p[1]
     

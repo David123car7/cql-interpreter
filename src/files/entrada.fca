@@ -1,5 +1,4 @@
 IMPORT TABLE observacoes FROM "observacoes.csv";
-SELECT * FROM observacoes WHERE Temperatura > 22 AND Humidade <= 50
-SELECT DataHoraObservacao FROM observacoes; 
-EXPORT TABLE observacoes AS "output/export.csv"; 
-DISCARD TABLE observacoes;
+SELECT * FROM observacoes;
+SELECT * FROM observacoes WHERE Temperatura > 22;
+
