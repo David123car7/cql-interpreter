@@ -1,4 +1,3 @@
-SELECT * FROM estacoes;
 IMPORT TABLE estacoes FROM "estacoes.csv";
-EXPORT TABLE estacoes AS "export.csv"; 
+EXPORT TABLE estacoes AS "output/export.csv"; 
 DISCARD TABLE estacoes;

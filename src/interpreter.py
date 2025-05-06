@@ -7,6 +7,7 @@ class Interpreter:
         self.parser = Parser()
         self.filesCSV = FilesCSV()
         self.tablesData = {}
+        self.filePath = "files/"
         
     
     def run(self, data):
@@ -32,7 +33,7 @@ class Interpreter:
             self.discard_table(command[1])
     
     def import_table(self, table_name, filename):
-        data = self.filesCSV.read_csv(filename)
+        data = self.filesCSV.read_csv(self.filePath + filename)
         if(data):
             self.tablesData[table_name] = data
            
