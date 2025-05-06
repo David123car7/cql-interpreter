@@ -15,7 +15,6 @@ class Interpreter:
         if result is None:
             print("No result from parser")
             return None
-
         for cmd in result:
             self.execute(cmd)
     
@@ -31,6 +30,8 @@ class Interpreter:
             self.print_table(command[1])
         elif(cmd == "DISCARD"):
             self.discard_table(command[1])
+        elif(cmd == "SELECT"):
+            self.select_table(command[1])
     
     def import_table(self, table_name, filename):
         data = self.filesCSV.read_csv(self.filePath + filename)
@@ -61,4 +62,25 @@ class Interpreter:
         if table_name in self.tablesData:
             self.tablesData.pop(table_name)
         else:
-            print(f"Table {table_name} not found.")    
+            print(f"Table {table_name} not found.")
+
+    def select_table(self, table_name):
+        if table_name == "":
+            print("Table name is empty")
+            return None
+        if table_name not in self.tablesData:
+            print(f"Table {table_name} does not exist.")
+            return None
+        data = self.tablesData.get(table_name)
+
+        header = data.get("header", [])
+        rows = data.get("data", [])
+
+        print("Table:", table_name)
+        print("Header:", header)
+        print("Rows:")
+        for row in rows:
+            print(row)
+        return data
+            
+
