@@ -1,2 +1,3 @@
-IMPORT TABLE estacoes FROM "observacoes.csv";
-EXPORT TABLE estacoes AS "kazzio.csv"; 
+IMPORT TABLE estacoes FROM "observacoes.csv"; 
+RENAME TABLE estacoes "Safira";
+PRINT TABLE Safira;

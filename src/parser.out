@@ -20,9 +20,7 @@ Unused terminals:
     LIMIT
     NOT_EQUALS
     NUMBER
-    PRINT
     PROCEDURE
-    RENAME
     SELECT
     USING
     WHERE
@@ -34,13 +32,17 @@ Rule 1     program -> table_command
 Rule 2     program -> program table_command
 Rule 3     table_command -> import_command
 Rule 4     table_command -> export_command
-Rule 5     import_command -> IMPORT TABLE ID FROM STRING SEMICOLON
-Rule 6     export_command -> EXPORT TABLE ID AS STRING SEMICOLON
+Rule 5     table_command -> rename_command
+Rule 6     table_command -> print_command
+Rule 7     import_command -> IMPORT TABLE ID FROM STRING SEMICOLON
+Rule 8     export_command -> EXPORT TABLE ID AS STRING SEMICOLON
+Rule 9     rename_command -> RENAME TABLE ID STRING SEMICOLON
+Rule 10    print_command -> PRINT TABLE ID SEMICOLON
 
 Terminals, with rules where they appear
 
 AND                  : 
-AS                   : 6
+AS                   : 8
 ASTERISK             : 
 CALL                 : 
 COMMA                : 
@@ -50,25 +52,25 @@ CREATE               :
 DISCARD              : 
 END                  : 
 EQUALS               : 
-EXPORT               : 6
-FROM                 : 5
+EXPORT               : 8
+FROM                 : 7
 GREATER_EQUALS       : 
 GREATER_THAN         : 
-ID                   : 5 6
-IMPORT               : 5
+ID                   : 7 8 9 10
+IMPORT               : 7
 JOIN                 : 
 LESS_EQUALS          : 
 LESS_THAN            : 
 LIMIT                : 
 NOT_EQUALS           : 
 NUMBER               : 
-PRINT                : 
+PRINT                : 10
 PROCEDURE            : 
-RENAME               : 
+RENAME               : 9
 SELECT               : 
-SEMICOLON            : 5 6
-STRING               : 5 6
-TABLE                : 5 6
+SEMICOLON            : 7 8 9 10
+STRING               : 7 8 9
+TABLE                : 7 8 9 10
 USING                : 
 WHERE                : 
 error                : 
@@ -77,7 +79,9 @@ Nonterminals, with rules where they appear
 
 export_command       : 4
 import_command       : 3
+print_command        : 6
 program              : 2 0
+rename_command       : 5
 table_command        : 1 2
 
 Parsing method: LALR
@@ -89,16 +93,24 @@ state 0
     (2) program -> . program table_command
     (3) table_command -> . import_command
     (4) table_command -> . export_command
-    (5) import_command -> . IMPORT TABLE ID FROM STRING SEMICOLON
-    (6) export_command -> . EXPORT TABLE ID AS STRING SEMICOLON
+    (5) table_command -> . rename_command
+    (6) table_command -> . print_command
+    (7) import_command -> . IMPORT TABLE ID FROM STRING SEMICOLON
+    (8) export_command -> . EXPORT TABLE ID AS STRING SEMICOLON
+    (9) rename_command -> . RENAME TABLE ID STRING SEMICOLON
+    (10) print_command -> . PRINT TABLE ID SEMICOLON
 
-    IMPORT          shift and go to state 5
-    EXPORT          shift and go to state 6
+    IMPORT          shift and go to state 7
+    EXPORT          shift and go to state 8
+    RENAME          shift and go to state 9
+    PRINT           shift and go to state 10
 
     program                        shift and go to state 1
     table_command                  shift and go to state 2
     import_command                 shift and go to state 3
     export_command                 shift and go to state 4
+    rename_command                 shift and go to state 5
+    print_command                  shift and go to state 6
 
 state 1
 
@@ -106,15 +118,23 @@ state 1
     (2) program -> program . table_command
     (3) table_command -> . import_command
     (4) table_command -> . export_command
-    (5) import_command -> . IMPORT TABLE ID FROM STRING SEMICOLON
-    (6) export_command -> . EXPORT TABLE ID AS STRING SEMICOLON
+    (5) table_command -> . rename_command
+    (6) table_command -> . print_command
+    (7) import_command -> . IMPORT TABLE ID FROM STRING SEMICOLON
+    (8) export_command -> . EXPORT TABLE ID AS STRING SEMICOLON
+    (9) rename_command -> . RENAME TABLE ID STRING SEMICOLON
+    (10) print_command -> . PRINT TABLE ID SEMICOLON
 
-    IMPORT          shift and go to state 5
-    EXPORT          shift and go to state 6
+    IMPORT          shift and go to state 7
+    EXPORT          shift and go to state 8
+    RENAME          shift and go to state 9
+    PRINT           shift and go to state 10
 
-    table_command                  shift and go to state 7
+    table_command                  shift and go to state 11
     import_command                 shift and go to state 3
     export_command                 shift and go to state 4
+    rename_command                 shift and go to state 5
+    print_command                  shift and go to state 6
 
 state 2
 
@@ -122,6 +142,8 @@ state 2
 
     IMPORT          reduce using rule 1 (program -> table_command .)
     EXPORT          reduce using rule 1 (program -> table_command .)
+    RENAME          reduce using rule 1 (program -> table_command .)
+    PRINT           reduce using rule 1 (program -> table_command .)
     $end            reduce using rule 1 (program -> table_command .)
 
 
@@ -131,6 +153,8 @@ state 3
 
     IMPORT          reduce using rule 3 (table_command -> import_command .)
     EXPORT          reduce using rule 3 (table_command -> import_command .)
+    RENAME          reduce using rule 3 (table_command -> import_command .)
+    PRINT           reduce using rule 3 (table_command -> import_command .)
     $end            reduce using rule 3 (table_command -> import_command .)
 
 
@@ -140,102 +164,203 @@ state 4
 
     IMPORT          reduce using rule 4 (table_command -> export_command .)
     EXPORT          reduce using rule 4 (table_command -> export_command .)
+    RENAME          reduce using rule 4 (table_command -> export_command .)
+    PRINT           reduce using rule 4 (table_command -> export_command .)
     $end            reduce using rule 4 (table_command -> export_command .)
 
 
 state 5
 
-    (5) import_command -> IMPORT . TABLE ID FROM STRING SEMICOLON
+    (5) table_command -> rename_command .
 
-    TABLE           shift and go to state 8
+    IMPORT          reduce using rule 5 (table_command -> rename_command .)
+    EXPORT          reduce using rule 5 (table_command -> rename_command .)
+    RENAME          reduce using rule 5 (table_command -> rename_command .)
+    PRINT           reduce using rule 5 (table_command -> rename_command .)
+    $end            reduce using rule 5 (table_command -> rename_command .)
 
 
 state 6
 
-    (6) export_command -> EXPORT . TABLE ID AS STRING SEMICOLON
+    (6) table_command -> print_command .
 
-    TABLE           shift and go to state 9
+    IMPORT          reduce using rule 6 (table_command -> print_command .)
+    EXPORT          reduce using rule 6 (table_command -> print_command .)
+    RENAME          reduce using rule 6 (table_command -> print_command .)
+    PRINT           reduce using rule 6 (table_command -> print_command .)
+    $end            reduce using rule 6 (table_command -> print_command .)
 
 
 state 7
+
+    (7) import_command -> IMPORT . TABLE ID FROM STRING SEMICOLON
+
+    TABLE           shift and go to state 12
+
+
+state 8
+
+    (8) export_command -> EXPORT . TABLE ID AS STRING SEMICOLON
+
+    TABLE           shift and go to state 13
+
+
+state 9
+
+    (9) rename_command -> RENAME . TABLE ID STRING SEMICOLON
+
+    TABLE           shift and go to state 14
+
+
+state 10
+
+    (10) print_command -> PRINT . TABLE ID SEMICOLON
+
+    TABLE           shift and go to state 15
+
+
+state 11
 
     (2) program -> program table_command .
 
     IMPORT          reduce using rule 2 (program -> program table_command .)
     EXPORT          reduce using rule 2 (program -> program table_command .)
+    RENAME          reduce using rule 2 (program -> program table_command .)
+    PRINT           reduce using rule 2 (program -> program table_command .)
     $end            reduce using rule 2 (program -> program table_command .)
-
-
-state 8
-
-    (5) import_command -> IMPORT TABLE . ID FROM STRING SEMICOLON
-
-    ID              shift and go to state 10
-
-
-state 9
-
-    (6) export_command -> EXPORT TABLE . ID AS STRING SEMICOLON
-
-    ID              shift and go to state 11
-
-
-state 10
-
-    (5) import_command -> IMPORT TABLE ID . FROM STRING SEMICOLON
-
-    FROM            shift and go to state 12
-
-
-state 11
-
-    (6) export_command -> EXPORT TABLE ID . AS STRING SEMICOLON
-
-    AS              shift and go to state 13
 
 
 state 12
 
-    (5) import_command -> IMPORT TABLE ID FROM . STRING SEMICOLON
+    (7) import_command -> IMPORT TABLE . ID FROM STRING SEMICOLON
 
-    STRING          shift and go to state 14
+    ID              shift and go to state 16
 
 
 state 13
 
-    (6) export_command -> EXPORT TABLE ID AS . STRING SEMICOLON
+    (8) export_command -> EXPORT TABLE . ID AS STRING SEMICOLON
 
-    STRING          shift and go to state 15
+    ID              shift and go to state 17
 
 
 state 14
 
-    (5) import_command -> IMPORT TABLE ID FROM STRING . SEMICOLON
+    (9) rename_command -> RENAME TABLE . ID STRING SEMICOLON
 
-    SEMICOLON       shift and go to state 16
+    ID              shift and go to state 18
 
 
 state 15
 
-    (6) export_command -> EXPORT TABLE ID AS STRING . SEMICOLON
+    (10) print_command -> PRINT TABLE . ID SEMICOLON
 
-    SEMICOLON       shift and go to state 17
+    ID              shift and go to state 19
 
 
 state 16
 
-    (5) import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .
+    (7) import_command -> IMPORT TABLE ID . FROM STRING SEMICOLON
 
-    IMPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
-    EXPORT          reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
-    $end            reduce using rule 5 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+    FROM            shift and go to state 20
 
 
 state 17
 
-    (6) export_command -> EXPORT TABLE ID AS STRING SEMICOLON .
+    (8) export_command -> EXPORT TABLE ID . AS STRING SEMICOLON
 
-    IMPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
-    EXPORT          reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
-    $end            reduce using rule 6 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
+    AS              shift and go to state 21
+
+
+state 18
+
+    (9) rename_command -> RENAME TABLE ID . STRING SEMICOLON
+
+    STRING          shift and go to state 22
+
+
+state 19
+
+    (10) print_command -> PRINT TABLE ID . SEMICOLON
+
+    SEMICOLON       shift and go to state 23
+
+
+state 20
+
+    (7) import_command -> IMPORT TABLE ID FROM . STRING SEMICOLON
+
+    STRING          shift and go to state 24
+
+
+state 21
+
+    (8) export_command -> EXPORT TABLE ID AS . STRING SEMICOLON
+
+    STRING          shift and go to state 25
+
+
+state 22
+
+    (9) rename_command -> RENAME TABLE ID STRING . SEMICOLON
+
+    SEMICOLON       shift and go to state 26
+
+
+state 23
+
+    (10) print_command -> PRINT TABLE ID SEMICOLON .
+
+    IMPORT          reduce using rule 10 (print_command -> PRINT TABLE ID SEMICOLON .)
+    EXPORT          reduce using rule 10 (print_command -> PRINT TABLE ID SEMICOLON .)
+    RENAME          reduce using rule 10 (print_command -> PRINT TABLE ID SEMICOLON .)
+    PRINT           reduce using rule 10 (print_command -> PRINT TABLE ID SEMICOLON .)
+    $end            reduce using rule 10 (print_command -> PRINT TABLE ID SEMICOLON .)
+
+
+state 24
+
+    (7) import_command -> IMPORT TABLE ID FROM STRING . SEMICOLON
+
+    SEMICOLON       shift and go to state 27
+
+
+state 25
+
+    (8) export_command -> EXPORT TABLE ID AS STRING . SEMICOLON
+
+    SEMICOLON       shift and go to state 28
+
+
+state 26
+
+    (9) rename_command -> RENAME TABLE ID STRING SEMICOLON .
+
+    IMPORT          reduce using rule 9 (rename_command -> RENAME TABLE ID STRING SEMICOLON .)
+    EXPORT          reduce using rule 9 (rename_command -> RENAME TABLE ID STRING SEMICOLON .)
+    RENAME          reduce using rule 9 (rename_command -> RENAME TABLE ID STRING SEMICOLON .)
+    PRINT           reduce using rule 9 (rename_command -> RENAME TABLE ID STRING SEMICOLON .)
+    $end            reduce using rule 9 (rename_command -> RENAME TABLE ID STRING SEMICOLON .)
+
+
+state 27
+
+    (7) import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .
+
+    IMPORT          reduce using rule 7 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+    EXPORT          reduce using rule 7 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+    RENAME          reduce using rule 7 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+    PRINT           reduce using rule 7 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+    $end            reduce using rule 7 (import_command -> IMPORT TABLE ID FROM STRING SEMICOLON .)
+
+
+state 28
+
+    (8) export_command -> EXPORT TABLE ID AS STRING SEMICOLON .
+
+    IMPORT          reduce using rule 8 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
+    EXPORT          reduce using rule 8 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
+    RENAME          reduce using rule 8 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
+    PRINT           reduce using rule 8 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
+    $end            reduce using rule 8 (export_command -> EXPORT TABLE ID AS STRING SEMICOLON .)
 

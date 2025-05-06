@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND AS ASTERISK CALL COMMA COMMENT COMMENTS CREATE DISCARD END EQUALS EXPORT FROM GREATER_EQUALS GREATER_THAN ID IMPORT JOIN LESS_EQUALS LESS_THAN LIMIT NOT_EQUALS NUMBER PRINT PROCEDURE RENAME SELECT SEMICOLON STRING TABLE USING WHEREprogram : table_command \n| program table_commandtable_command : import_command\n| export_commandimport_command : IMPORT TABLE ID FROM STRING SEMICOLONexport_command : EXPORT TABLE ID AS STRING SEMICOLON'
+_lr_signature = 'AND AS ASTERISK CALL COMMA COMMENT COMMENTS CREATE DISCARD END EQUALS EXPORT FROM GREATER_EQUALS GREATER_THAN ID IMPORT JOIN LESS_EQUALS LESS_THAN LIMIT NOT_EQUALS NUMBER PRINT PROCEDURE RENAME SELECT SEMICOLON STRING TABLE USING WHEREprogram : table_command \n                   | program table_commandtable_command : import_command\n            | export_command\n            | rename_command\n            | print_commandimport_command : IMPORT TABLE ID FROM STRING SEMICOLONexport_command : EXPORT TABLE ID AS STRING SEMICOLONrename_command : RENAME TABLE ID STRING SEMICOLONprint_command : PRINT TABLE ID SEMICOLON'
     
-_lr_action_items = {'IMPORT':([0,1,2,3,4,7,16,17,],[5,5,-1,-3,-4,-2,-5,-6,]),'EXPORT':([0,1,2,3,4,7,16,17,],[6,6,-1,-3,-4,-2,-5,-6,]),'$end':([1,2,3,4,7,16,17,],[0,-1,-3,-4,-2,-5,-6,]),'TABLE':([5,6,],[8,9,]),'ID':([8,9,],[10,11,]),'FROM':([10,],[12,]),'AS':([11,],[13,]),'STRING':([12,13,],[14,15,]),'SEMICOLON':([14,15,],[16,17,]),}
+_lr_action_items = {'IMPORT':([0,1,2,3,4,5,6,11,23,26,27,28,],[7,7,-1,-3,-4,-5,-6,-2,-10,-9,-7,-8,]),'EXPORT':([0,1,2,3,4,5,6,11,23,26,27,28,],[8,8,-1,-3,-4,-5,-6,-2,-10,-9,-7,-8,]),'RENAME':([0,1,2,3,4,5,6,11,23,26,27,28,],[9,9,-1,-3,-4,-5,-6,-2,-10,-9,-7,-8,]),'PRINT':([0,1,2,3,4,5,6,11,23,26,27,28,],[10,10,-1,-3,-4,-5,-6,-2,-10,-9,-7,-8,]),'$end':([1,2,3,4,5,6,11,23,26,27,28,],[0,-1,-3,-4,-5,-6,-2,-10,-9,-7,-8,]),'TABLE':([7,8,9,10,],[12,13,14,15,]),'ID':([12,13,14,15,],[16,17,18,19,]),'FROM':([16,],[20,]),'AS':([17,],[21,]),'STRING':([18,20,21,],[22,24,25,]),'SEMICOLON':([19,22,24,25,],[23,26,27,28,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'table_command':([0,1,],[2,7,]),'import_command':([0,1,],[3,3,]),'export_command':([0,1,],[4,4,]),}
+_lr_goto_items = {'program':([0,],[1,]),'table_command':([0,1,],[2,11,]),'import_command':([0,1,],[3,3,]),'export_command':([0,1,],[4,4,]),'rename_command':([0,1,],[5,5,]),'print_command':([0,1,],[6,6,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -31,6 +31,10 @@ _lr_productions = [
   ('program -> program table_command','program',2,'p_program','parser.py',13),
   ('table_command -> import_command','table_command',1,'p_table_command','parser.py',20),
   ('table_command -> export_command','table_command',1,'p_table_command','parser.py',21),
-  ('import_command -> IMPORT TABLE ID FROM STRING SEMICOLON','import_command',6,'p_import_command','parser.py',25),
-  ('export_command -> EXPORT TABLE ID AS STRING SEMICOLON','export_command',6,'p_export_command','parser.py',30),
+  ('table_command -> rename_command','table_command',1,'p_table_command','parser.py',22),
+  ('table_command -> print_command','table_command',1,'p_table_command','parser.py',23),
+  ('import_command -> IMPORT TABLE ID FROM STRING SEMICOLON','import_command',6,'p_import_command','parser.py',27),
+  ('export_command -> EXPORT TABLE ID AS STRING SEMICOLON','export_command',6,'p_export_command','parser.py',32),
+  ('rename_command -> RENAME TABLE ID STRING SEMICOLON','rename_command',5,'p_rename_commmand','parser.py',37),
+  ('print_command -> PRINT TABLE ID SEMICOLON','print_command',4,'p_print_command','parser.py',42),
 ]
