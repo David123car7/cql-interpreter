@@ -205,47 +205,36 @@ class Interpreter:
         Returns:
             dict or None: Filtered table with "header" and "data" keys, or None.
         """
-        if not table_name:
+        if table_name == "":
             print("Table name is empty")
             return None
         if table_name not in self.tablesData:
             print(f"Table {table_name} does not exist.")
             return None
+        
+        data = self.tablesData.get(table_name)
+        dataLimit = int(limit) if limit is not None else None
+        id = condition[1] 
+        value = condition[3]
+        condition = condition[2]
+        new_data = []
 
-        data   = self.tablesData[table_name]
-        header = data.get("header", [])
-        rows   = data.get("data", [])
-
-        # Unpack condition
-        _, column_name, operator, value = condition
-        try:
-            col_idx = header.index(column_name)
-        except ValueError:
-            print(f"Column {column_name!r} not found in table '{table_name}'.")
-            return None
-
-        # Determine slice end
-        slice_end = int(limit) if limit is not None else None
-        candidates = rows[:slice_end]
-
-        # Filter rows
-        filtered = []
-        for row in candidates:
-            cell = row[col_idx]
-            try:
-                left  = float(cell)
-                right = float(value)
-            except (ValueError, TypeError):
-                left  = str(cell)
-                right = str(value)
-
-            if   operator == "="  and left  == right: filtered.append(row)
-            elif operator == "!=" and left  != right: filtered.append(row)
-            elif operator == "<"  and left  <  right: filtered.append(row)
-            elif operator == ">"  and left  >  right: filtered.append(row)
-            elif operator == "<=" and left  <= right: filtered.append(row)
-            elif operator == ">=" and left  >= right: filtered.append(row)
+        header = data.get("header")
+        rows = data.get("data")
+        for row in rows[:dataLimit]:
+            cell = row[header.index(id) ]
+            if condition == "=" and float(cell) == value:
+                new_data.append(row)
+            elif condition == "!=" and float(cell) != value:
+                new_data.append(row)
+            elif condition == "<" and float(cell) < value:
+                new_data.append(row)
+            elif condition == ">" and float(cell) > value:
+                new_data.append(row)
+            elif condition == "<=" and float(cell) <= value:
+                new_data.append(row)
+            elif condition == ">=" and float(cell) >= value:
+                new_data.append(row)
 
         print(header)
-        print(filtered)
-        return {"header": header, "data": filtered}
+        print(new_data)
