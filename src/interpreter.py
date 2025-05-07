@@ -35,11 +35,11 @@ class Interpreter:
         elif(cmd == "SELECT_LIMIT"):
             self.select_table_Limit(command[1], command[2])
         elif(cmd == "SELECT_SPECIFIC_NO_LIMIT"):
-            self.select_specific(command[2], command[1])
+            self.select_specific_no_limit(command[2], command[1])
         elif(cmd == "SELECT_SPECIFIC_LIMIT"):
-            self.select_specific_Limit(command[2], command[1], command[3])
-        elif(cmd == "SELECT_WHERE"):
-            self.select_where(command[1], command[2])
+            self.select_specific_limit(command[2], command[1], command[3])
+        elif(cmd == "SELECT_WHERE_NO_LIMIT"):
+            self.select_where_no_limit(command[1], command[2])
             
     
     def import_table(self, table_name, filename):
@@ -95,7 +95,7 @@ class Interpreter:
     
     # Select specific columns from a table
     # This function is used to select specific columns from a table.
-    def select_specific(self, table_name,columns):
+    def select_specific_no_limit(self, table_name,columns):
         if table_name == "":
             print("Table name is empty")
             return None
@@ -140,7 +140,7 @@ class Interpreter:
             print(row)
         return data
     
-    def select_specific_Limit(self, table_name,columns,limit):
+    def select_specific_limit(self, table_name,columns,limit):
         if table_name == "":
             print("Table name is empty")
             return None
@@ -168,24 +168,36 @@ class Interpreter:
             print(selected_row)
 
     #NAO FUNCIONA
-    def select_where(self, table_name, condition):
+    def select_where_no_limit(self, table_name, condition):
         if table_name == "":
             print("Table name is empty")
             return None
         if table_name not in self.tablesData:
             print(f"Table {table_name} does not exist.")
             return None
-        data = self.tablesData.get(table_name)
         
-
-        header = data.get("header", [])
-        rows = data.get("data", [])
-        new_data= []
+        id = condition[1]
+        value = condition[3]
+        condition = condition[2]
+        data = self.tablesData.get(table_name)
+        new_data = []
+        header = data.get("header")
+        rows = data.get("data")
         print(header)
+        column_indices = header.index(id) 
         for row in rows:
-            for item in row:
-                if condition in item:
-                    new_data.append(row)
+            cell = row[column_indices]
+            if condition == "=" and float(cell) == float(value):
+                new_data.append(row)
+            elif condition == "!=" and float(cell) != float(value):
+                new_data.append(row)
+            elif condition == "<" and float(cell) < float(value):
+                new_data.append(row)
+            elif condition == ">" and float(cell) > float(value):
+                new_data.append(row)
+            elif condition == "<=" and float(cell) <= float(value):
+                new_data.append(row)
+            elif condition == ">=" and float(cell) >= float(value):
+                new_data.append(row)
+
         print(new_data)
-            
-        return data

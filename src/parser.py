@@ -64,13 +64,13 @@ class Parser:
         """selectAll_command : selectAll_command_no_limit
         | selectAll_command_limit"""
         p[0] = p[1]
-    #DONE
+
     def p_selectAll_command_no_limit(self, p):
         """selectAll_command_no_limit : SELECT ASTERISK FROM ID SEMICOLON"""
         print(f"Selecting all data from table {p[4]}")
         p[0] = ("SELECT_NO_LIMIT", p[4])
 
-    #DONE
+    
     def p_selectAll_command_limit(self, p):
         """selectAll_command_limit : SELECT ASTERISK FROM ID LIMIT NUMBER SEMICOLON"""
         print(f"Selecting all data from table {p[4]} with limit {p[6]}")
@@ -82,13 +82,11 @@ class Parser:
         | select_specific_limit"""
         p[0] = p[1]
 
-    #DONE
     def p_select_specific_no_limit(self, p):
         """select_specific_no_limit : SELECT select_list FROM ID SEMICOLON"""
         print(f"Selecting {p[2]} from table {p[4]}")
         p[0] = ("SELECT_SPECIFIC_NO_LIMIT", p[2], p[4])
 
-    #DONE
     def p_select_specific_limit(self, p):
         """select_specific_limit : SELECT select_list FROM ID LIMIT NUMBER SEMICOLON"""
         print(f"Selecting {p[2]} from table {p[4]} with limit {p[6]}")
@@ -98,6 +96,7 @@ class Parser:
         """select_where_command : select_where_command_no_limit
         | select_where_command_limit"""
         p[0] = p[1]
+        
     #MISSING 
     def p_select_where_command_no_limit(self, p):
         """select_where_command_no_limit : SELECT ASTERISK FROM ID WHERE condition SEMICOLON"""
