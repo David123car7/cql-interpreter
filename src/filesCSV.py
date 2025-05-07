@@ -21,8 +21,7 @@ class FilesCSV:
                                 header = row
                             else:
                                 data.append(row)
-                    #print(header)
-                    #print(data)
+
                     return {"header": header, "data": data}
                 except Exception as e:
                     print(f"Error reading CSV file: {str(e)}")

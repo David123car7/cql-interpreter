@@ -20,6 +20,7 @@ class Interpreter:
         self.filesCSV = FilesCSV()
         self.tablesData = {}
         self.filePath = "files/"
+        self.procedures = {}
 
     def run(self, data):
         """
@@ -75,6 +76,8 @@ class Interpreter:
             self.create_table_select_where(command[1],command[2], command[3])
         elif cmd == "CREATE_TABLE_SELECT_WHERE_LIMIT":
             self.create_table_select_where(command[1], command[2], command[3], command[4])
+        elif cmd == "PROCEDURE":
+            self.procedure(command[1], command[2])
 
     def import_table(self, table_name, filename):
         """
@@ -300,3 +303,23 @@ class Interpreter:
         
         self.tablesData[new_table] = self.select_where(table_name, condition, limit)
         print(f"Table {new_table} created from {table_name} with condition {condition}")
+
+    def procedure(self, name, command):
+        """
+        Create a procedure with the given name and command.
+        Args:
+            name (str): Name of the procedure.
+            command (str): Command to execute when the procedure is called.
+        Returns:
+            None
+        """
+        if name in self.tablesData:
+            print(f"Procedure {name} already exists.")
+            return False
+        
+        if command == "":
+            print("Command is empty")
+            return False
+
+        for cmd in command:
+            self.execute(cmd)

@@ -20,6 +20,7 @@ class Lexer:
         'as': 'AS',
         'procedure': 'PROCEDURE',
         'end': 'END',
+        'do': 'DO',
     }
     tokens  = [
         'ID',

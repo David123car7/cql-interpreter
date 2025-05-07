@@ -1,3 +1,7 @@
+PROCEDURE atualizar_observacoes DO
 IMPORT TABLE observacoes FROM "observacoes.csv";
-CREATE TABLE teste SELECT * FROM observacoes WHERE Temperatura > 1 AND IntensidadeVentoKM > 1 LIMIT 1; 
+CREATE TABLE mais_quentes SELECT * FROM observacoes WHERE Temperatura > 22 ;
+EXPORT TABLE mais_quentes AS "teste2.csv";
+END
+
 

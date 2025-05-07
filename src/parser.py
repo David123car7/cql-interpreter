@@ -14,7 +14,9 @@ class Parser:
                    | query_command
                    | program query_command
                    | create_table
-                   | program create_table"""
+                   | program create_table
+                   | procedure"""
+
         if len(p) == 2:
             p[0] = [p[1]]
         else:
@@ -27,6 +29,14 @@ class Parser:
             | print_command
             | discard_command"""
         p[0] = p[1]
+
+    def p_command(self, p):
+        """command : table_command
+        | query_command
+        | create_table
+        | procedure"""
+        p[0] = p[1]
+
 
     def p_query_command(self, p):
         """query_command : selectAll_command
@@ -74,11 +84,11 @@ class Parser:
         """selectAll_command_no_limit : SELECT ASTERISK FROM ID SEMICOLON"""
         p[0] = ("SELECT_NO_LIMIT", p[4])
 
-    
+    #region
     def p_selectAll_command_limit(self, p):
         """selectAll_command_limit : SELECT ASTERISK FROM ID LIMIT NUMBER SEMICOLON"""
         p[0] = ("SELECT_LIMIT", p[4], p[6])
-    
+    #endregion
     
     def p_select_specific(self, p):
         """select_specific : select_specific_no_limit
@@ -157,6 +167,22 @@ class Parser:
          p[0] = ("CREATE_TABLE_SELECT_WHERE_LIMIT", p[3], selectWhere[1], selectWhere[2], selectWhere[3])
     #endregion
     
+    #region Procedures
+
+    def p_procedure_command_single(self, p):
+        """procedure_command : command"""
+        p[0] = [p[1]]
+
+    def p_procedure_command_multi(self, p):
+        """procedure_command : procedure_command command"""
+        p[0] = p[1] + [p[2]]
+
+    def p_procedure(self, p):
+        """procedure : PROCEDURE ID DO procedure_command END"""
+        print(f"Creating procedure {p[2]} with commands {p[4]}")
+        p[0] = ("PROCEDURE", p[2], p[4])
+    #endregion
+
     def p_error(self, p):
         if p:
             print(f"Syntax error at {p.value!r}")
