@@ -94,7 +94,6 @@ class Parser:
         print(f"Selecting {p[2]} from table {p[4]} with limit {p[6]}")
         p[0] = ("SELECT_SPECIFIC_LIMIT", p[2], p[4], p[6])
     
-    
     def p_select_where_command(self, p):
         """select_where_command : select_where_command_no_limit
         | select_where_command_limit"""

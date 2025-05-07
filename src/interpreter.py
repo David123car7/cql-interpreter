@@ -176,6 +176,7 @@ class Interpreter:
             print(f"Table {table_name} does not exist.")
             return None
         data = self.tablesData.get(table_name)
+        
 
         header = data.get("header", [])
         rows = data.get("data", [])
