@@ -12,7 +12,6 @@ The main goal is to allow users to perform data query and manipulation operation
 - **Queries**: `SELECT` with support for `WHERE` and `LIMIT` clauses
 - **Table manipulation**: `CREATE TABLE`, `RENAME TABLE`, `DISCARD TABLE`
 - **Procedures**: defining and executing procedures with `PROCEDURE` and `CALL`
-- **Comments**: support for single-line and multi-line comments
 
 ## 🛠️ Technologies Used
 
