@@ -35,11 +35,11 @@ The main goal is to allow users to perform data query and manipulation operation
 3. **Run the interpreter No File:**
    
       ```bash
-   python interpreter.py
+   python cql_interpreter.py
 
 4. **Run the interpreter With File:**
    
       ```bash
-   python interpreter.py entrada.fca
+   python cql_interpreter.py files/entrada.fca
 
 
