@@ -1,2 +1,3 @@
 IMPORT TABLE observacoes FROM "observacoes.csv";
-SELECT * FROM observacoes WHERE IntensidadeVentoKM > 1 LIMIT 2;
+SELECT * FROM observacoes LIMIT 1;
+

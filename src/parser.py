@@ -88,12 +88,11 @@ class Parser:
         """select_where_command : select_where_command_no_limit
         | select_where_command_limit"""
         p[0] = p[1]
-        
-    #MISSING 
+         
     def p_select_where_command_no_limit(self, p):
         """select_where_command_no_limit : SELECT ASTERISK FROM ID WHERE condition SEMICOLON"""
         p[0] = ("SELECT_WHERE_NO_LIMIT", p[4], p[6])
-    #MISSING
+
     def p_select_where_command_limit(self, p):
         """select_where_command_limit : SELECT ASTERISK FROM ID WHERE condition LIMIT NUMBER SEMICOLON"""
         p[0] = ("SELECT_WHERE_LIMIT", p[4], p[6], p[8])
