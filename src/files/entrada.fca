@@ -1,4 +1,3 @@
 IMPORT TABLE observacoes FROM "observacoes.csv";
-SELECT * FROM observacoes;
-SELECT * FROM observacoes WHERE Temperatura > 22;
 
+SELECT * FROM observacoes WHERE Id > 2 ;
