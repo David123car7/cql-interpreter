@@ -163,13 +163,17 @@ class Interpreter:
 
     def select_specific(self, table_name, columns, limit=None):
         """
-        Print specific columns (up to optional limit) of a table.
+        Return selected rows from a table based on one or more numerical conditions.
+
         Args:
-            table_name (str): Name of the table to select from.
-            columns (list of str): Column names to display.
-            limit (int, optional): Maximum number of rows to display.
+            table_name (str): Name of the table to query.
+            condition (list of tuples): Each tuple describes a filter in the form
+                (column_name, operator, value)
+            limit (int, optional): Maximum number of rows to scan from the table.
+
         Returns:
-            None
+            dict: A dictionary with keys 'header' (list of column names) and
+                'data' (list of rows matching all conditions), or None if invalid.
         """
         if not table_name:
             print("Table name is empty")
@@ -196,15 +200,6 @@ class Interpreter:
             print(selected_row)
 
     def select_where(self, table_name, condition, limit=None):
-        """
-        Print rows satisfying a WHERE condition, with optional limit.
-        Args:
-            table_name (str): Name of the table to query.
-            condition (tuple): A condition tuple, e.g., ("CONDITION", col, op, val).
-            limit (int, optional): Maximum number of rows to display.
-        Returns:
-            dict or None: Filtered table with "header" and "data" keys, or None.
-        """
         if table_name == "":
             print("Table name is empty")
             return None
@@ -214,27 +209,44 @@ class Interpreter:
         
         data = self.tablesData.get(table_name)
         dataLimit = int(limit) if limit is not None else None
-        id = condition[1] 
-        value = condition[3]
-        condition = condition[2]
-        new_data = []
+        new_data = {}
 
+        index = 0
         header = data.get("header")
         rows = data.get("data")
-        for row in rows[:dataLimit]:
-            cell = row[header.index(id) ]
-            if condition == "=" and float(cell) == value:
-                new_data.append(row)
-            elif condition == "!=" and float(cell) != value:
-                new_data.append(row)
-            elif condition == "<" and float(cell) < value:
-                new_data.append(row)
-            elif condition == ">" and float(cell) > value:
-                new_data.append(row)
-            elif condition == "<=" and float(cell) <= value:
-                new_data.append(row)
-            elif condition == ">=" and float(cell) >= value:
-                new_data.append(row)
-
+        for c in condition: 
+            new_data_aux = []
+            for row in rows[:dataLimit]:
+                cell = row[header.index(c[1])]
+                cond = c[2]
+                value = c[3]
+                if cond == "=" and float(cell) == value:
+                    new_data_aux.append(row)
+                elif cond == "!=" and float(cell) != value:
+                    new_data_aux.append(row)
+                elif cond == "<" and float(cell) < value:
+                    new_data_aux.append(row)
+                elif cond == ">" and float(cell) > value:
+                    new_data_aux.append(row)
+                elif cond == "<=" and float(cell) <= value:
+                    new_data_aux.append(row)
+                elif cond == ">=" and float(cell) >= value:
+                    new_data_aux.append(row)
+            new_data[index] = new_data_aux
+            index += 1
+        
+        parsed_data = []
+        index = 0
+        dictLenght = len(new_data)
+        for i in new_data:
+            for j in new_data[i]:
+                if(i+1 > dictLenght):
+                    break
+                for k in new_data[i+1]:
+                    if(j[0] == k[0]):
+                        parsed_data.append(k)
+            break
+        
         print(header)
-        print(new_data)
+        print(parsed_data)
+        return {"header": header, "data": parsed_data}

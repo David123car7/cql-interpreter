@@ -12,7 +12,9 @@ class Parser:
         """program : table_command 
                    | program table_command
                    | query_command
-                   | program query_command"""
+                   | program query_command
+                   | create_table
+                   | program create_table"""
         if len(p) == 2:
             p[0] = [p[1]]
         else:
@@ -55,7 +57,6 @@ class Parser:
         p[0] = ("PRINT", p[3])
 
     #Query commands
-    
     def p_selectAll_command(self, p):
         """selectAll_command : selectAll_command_no_limit
         | selectAll_command_limit"""
@@ -90,12 +91,20 @@ class Parser:
         p[0] = p[1]
          
     def p_select_where_command_no_limit(self, p):
-        """select_where_command_no_limit : SELECT ASTERISK FROM ID WHERE condition SEMICOLON"""
+        """select_where_command_no_limit : SELECT ASTERISK FROM ID WHERE condition_list SEMICOLON"""
         p[0] = ("SELECT_WHERE_NO_LIMIT", p[4], p[6])
 
     def p_select_where_command_limit(self, p):
-        """select_where_command_limit : SELECT ASTERISK FROM ID WHERE condition LIMIT NUMBER SEMICOLON"""
+        """select_where_command_limit : SELECT ASTERISK FROM ID WHERE condition_list LIMIT NUMBER SEMICOLON"""
         p[0] = ("SELECT_WHERE_LIMIT", p[4], p[6], p[8])
+
+    def p_condition_list_single(self, p):
+        "condition_list : condition"
+        p[0] = [p[1]]
+
+    def p_condition_list_and(self, p):
+        "condition_list : condition_list AND condition"
+        p[0] = p[1] + [p[3]]
 
     def p_condition(self, p):
         """condition : ID EQUALS NUMBER
@@ -103,8 +112,7 @@ class Parser:
         | ID LESS_THAN NUMBER
         | ID GREATER_THAN NUMBER
         | ID LESS_EQUALS NUMBER
-        | ID GREATER_EQUALS NUMBER
-        | condition AND condition"""
+        | ID GREATER_EQUALS NUMBER"""
         if len(p) == 4 and p[2] != "AND":
             p[0] = ("CONDITION", p[1], p[2], p[3])
         elif len(p) == 4 and p[2] == "AND":
@@ -117,6 +125,12 @@ class Parser:
     def p_select_list_single(self, p):
         "select_list : ID"
         p[0] = [p[1]]
+
+    #Create table 
+    def p_create_table(self, p):
+        """create_table : CREATE TABLE ID """
+        print(f"Creating table {p[3]}")
+        p[0] = ("CREATE", p[3])
 
     def p_error(self, p):
         if p:

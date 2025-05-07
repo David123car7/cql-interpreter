@@ -1,3 +1,2 @@
 IMPORT TABLE observacoes FROM "observacoes.csv";
-SELECT DataHoraObservacao,Id FROM observacoes;
-SELECT * FROM observacoes WHERE IntensidadeVentoKM > 1;
+SELECT * FROM observacoes WHERE IntensidadeVentoKM > 1 AND Temperatura > 13;
