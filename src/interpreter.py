@@ -67,6 +67,14 @@ class Interpreter:
             self.select_where(command[1], command[2])
         elif cmd == "SELECT_WHERE_LIMIT":
             self.select_where(command[1], command[2], command[3])
+        elif cmd == "CREATE_TABLE_SELECT_NO_LIMIT":
+            self.create_table_select(command[1], command[2])
+        elif cmd == "CREATE_TABLE_SELECT_LIMIT":
+            self.create_table_select(command[1], command[2], command[3])
+        elif cmd == "CREATE_TABLE_SELECT_WHERE_NO_LIMIT":
+            self.create_table_select_where(command[1],command[2], command[3])
+        elif cmd == "CREATE_TABLE_SELECT_WHERE_LIMIT":
+            self.create_table_select_where(command[1], command[2], command[3], command[4])
 
     def import_table(self, table_name, filename):
         """
@@ -144,7 +152,8 @@ class Interpreter:
             table_name (str): Name of the table to select from.
             limit (int, optional): Maximum number of rows to display.
         Returns:
-            None
+            dict: A dictionary with keys 'header' (list of column names) and
+                'data' (list of rows), or None if invalid.
         """
         if not table_name:
             print("Table name is empty")
@@ -153,13 +162,18 @@ class Interpreter:
             print(f"Table {table_name} does not exist.")
             return None
 
+        selectedTable = []
         data = self.tablesData[table_name]
         dataLimit = int(limit) if limit is not None else None
-        header = data.get("header", [])
-        rows = data.get("data", [])
-        print(header)
+        header = data.get("header")
+        rows = data.get("data")
         for row in rows[:dataLimit]:
-            print(row)
+            selectedTable.append(row)
+        
+        print(header)
+        print(selectedTable)
+        return {"header": header, "data": selectedTable}
+
 
     def select_specific(self, table_name, columns, limit=None):
         """
@@ -191,13 +205,17 @@ class Interpreter:
                 print(f"Column {col} does not exist in table {table_name}.")
                 return None
 
+        selectedTable = []
         column_indices = [header.index(col) for col in columns]
         dataLimit = int(limit) if limit is not None else None
-
-        print(columns)
         for row in rows[:dataLimit]:
             selected_row = [row[i] for i in column_indices]
-            print(selected_row)
+            selectedTable.append(selected_row)
+        
+        print(columns)
+        print(selectedTable)
+        return {"header": columns, "data": selectedTable}
+
 
     def select_where(self, table_name, condition, limit=None):
         if table_name == "":
@@ -209,44 +227,76 @@ class Interpreter:
         
         data = self.tablesData.get(table_name)
         dataLimit = int(limit) if limit is not None else None
-        new_data = {}
+        intermediate = {}
 
         index = 0
         header = data.get("header")
         rows = data.get("data")
         for c in condition: 
-            new_data_aux = []
+            filtered = []
             for row in rows[:dataLimit]:
                 cell = row[header.index(c[1])]
                 cond = c[2]
                 value = c[3]
                 if cond == "=" and float(cell) == value:
-                    new_data_aux.append(row)
+                    filtered.append(row)
                 elif cond == "!=" and float(cell) != value:
-                    new_data_aux.append(row)
+                    filtered.append(row)
                 elif cond == "<" and float(cell) < value:
-                    new_data_aux.append(row)
+                    filtered.append(row)
                 elif cond == ">" and float(cell) > value:
-                    new_data_aux.append(row)
+                    filtered.append(row)
                 elif cond == "<=" and float(cell) <= value:
-                    new_data_aux.append(row)
+                    filtered.append(row)
                 elif cond == ">=" and float(cell) >= value:
-                    new_data_aux.append(row)
-            new_data[index] = new_data_aux
+                    filtered.append(row)
+            intermediate[index] = filtered
             index += 1
-        
+  
         parsed_data = []
         index = 0
-        dictLenght = len(new_data)
-        for i in new_data:
-            for j in new_data[i]:
-                if(i+1 > dictLenght):
-                    break
-                for k in new_data[i+1]:
-                    if(j[0] == k[0]):
-                        parsed_data.append(k)
-            break
+        dictLenght = len(intermediate)
+        if(dictLenght != 1):
+            for i in intermediate:
+                for j in intermediate[i]:
+                    if(i+1 > dictLenght):
+                        break
+                    for k in intermediate[i+1]:
+                        if(j[0] == k[0]):
+                            parsed_data.append(k)
+                break
+        else:
+            parsed_data = intermediate[0]
         
         print(header)
         print(parsed_data)
         return {"header": header, "data": parsed_data}
+    
+    def create_table_select(self, new_table, table_name, limit=None):
+        if table_name == "":
+            print("Table name is empty")
+            return False
+        if table_name not in self.tablesData:
+            print(f"Table {table_name} does not exist.")
+            return False
+        if new_table in self.tablesData:
+            print(f"Table {new_table} already exists.")
+            return False
+        
+        self.tablesData[new_table]= self.select_table(table_name, limit)
+        print(f"Table {new_table} created from {table_name}.")
+        return True
+    
+    def create_table_select_where(self, new_table, table_name, condition, limit=None):
+        if table_name == "":
+            print("Table name is empty")
+            return None
+        if table_name not in self.tablesData:
+            print(f"Table {table_name} does not exist.")
+            return None
+        if new_table in self.tablesData:
+            print(f"Table {new_table} already exists.")
+            return False
+        
+        self.tablesData[new_table] = self.select_where(table_name, condition, limit)
+        print(f"Table {new_table} created from {table_name} with condition {condition}")

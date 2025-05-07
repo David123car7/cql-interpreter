@@ -34,7 +34,14 @@ class Parser:
             | select_where_command"""
         p[0] = p[1]
     
-    #Table commands
+    def p_create_table(self, p):
+        """create_table : create_table_select_no_limit
+        | create_table_select_where_no_limit
+        | create_table_select_limit
+        | create_table_select_where_limit"""
+        p[0] = p[1]
+    
+    #region Table commands
     def p_import_command(self, p):
         """import_command : IMPORT TABLE ID FROM STRING SEMICOLON"""
         p[0] = ("IMPORT", p[3], p[5])
@@ -55,8 +62,9 @@ class Parser:
     def p_print_command(self, p):
         """print_command : PRINT TABLE ID SEMICOLON"""
         p[0] = ("PRINT", p[3])
+    #endregion
 
-    #Query commands
+    #region Query commands
     def p_selectAll_command(self, p):
         """selectAll_command : selectAll_command_no_limit
         | selectAll_command_limit"""
@@ -125,13 +133,30 @@ class Parser:
     def p_select_list_single(self, p):
         "select_list : ID"
         p[0] = [p[1]]
+    #endregion
 
-    #Create table 
-    def p_create_table(self, p):
-        """create_table : CREATE TABLE ID """
-        print(f"Creating table {p[3]}")
-        p[0] = ("CREATE", p[3])
+    #region Create table commands
+    def p_create_table_select_no_limit(self, p):
+        """create_table_select_no_limit : CREATE TABLE ID selectAll_command_no_limit"""
+        selectAll = p[4]
+        p[0] = ("CREATE_TABLE_SELECT_NO_LIMIT", p[3], selectAll[1])
 
+    def p_create_table_select_limit(self, p):
+        """create_table_select_limit : CREATE TABLE ID selectAll_command_limit"""
+        selectAll = p[4]
+        p[0] = ("CREATE_TABLE_SELECT_LIMIT", p[3], selectAll[1], selectAll[2])
+        
+    def p_create_table_select_where_no_limit(self, p):
+         """create_table_select_where_no_limit : CREATE TABLE ID select_where_command_no_limit"""
+         selectWhere = p[4]
+         p[0] = ("CREATE_TABLE_SELECT_WHERE_NO_LIMIT", p[3], selectWhere[1], selectWhere[2])
+
+    def p_create_table_select_where_limit(self, p):
+         """create_table_select_where_limit : CREATE TABLE ID select_where_command_limit"""
+         selectWhere = p[4]
+         p[0] = ("CREATE_TABLE_SELECT_WHERE_LIMIT", p[3], selectWhere[1], selectWhere[2], selectWhere[3])
+    #endregion
+    
     def p_error(self, p):
         if p:
             print(f"Syntax error at {p.value!r}")

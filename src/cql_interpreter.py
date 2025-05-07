@@ -3,7 +3,7 @@ import sys
 
 class Main:
     interpreter = Interpreter()
-
+    
     if len(sys.argv) == 2:
         try:
             with open(sys.argv[1], "r") as file:
