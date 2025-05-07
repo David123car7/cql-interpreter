@@ -21,7 +21,11 @@ class Lexer:
         'procedure': 'PROCEDURE',
         'end': 'END',
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     tokens  = [
         'ID',
         'STRING',
@@ -39,7 +43,7 @@ class Lexer:
         'ASTERISK',
         ] + list(reserved.values())
     
-    t_COMMA = r','
+    t_COMMA = r'\,'
     t_SEMICOLON = r';'
     t_EQUALS = r'='
     t_NOT_EQUALS = r'<>'
@@ -73,12 +77,20 @@ class Lexer:
         t.value = int(t.value)
         return t
 
+<<<<<<< Updated upstream
     def t_COMMENT(self,t):
+=======
+    def t_COMMENT(self, t):
+>>>>>>> Stashed changes
         r'--.*'
         pass
 
     def t_COMMENTS(self, t):
+<<<<<<< Updated upstream
         r'-(.|\n)-'
+=======
+        r"-[\s\S]*?-"
+>>>>>>> Stashed changes
         pass
 
     def t_error(self, t):
