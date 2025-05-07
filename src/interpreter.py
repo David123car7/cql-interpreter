@@ -40,6 +40,8 @@ class Interpreter:
             self.select_specific_limit(command[2], command[1], command[3])
         elif(cmd == "SELECT_WHERE_NO_LIMIT"):
             self.select_where_no_limit(command[1], command[2])
+        elif(cmd == "SELECT_WHERE_LIMIT"):
+            self.select_where_limit(command[1], command[2], command[3])
             
     
     def import_table(self, table_name, filename):
@@ -167,7 +169,7 @@ class Interpreter:
             selected_row = [row[i] for i in column_indices]
             print(selected_row)
 
-    #NAO FUNCIONA
+    
     def select_where_no_limit(self, table_name, condition):
         if table_name == "":
             print("Table name is empty")
@@ -175,29 +177,63 @@ class Interpreter:
         if table_name not in self.tablesData:
             print(f"Table {table_name} does not exist.")
             return None
-        
+        data = self.tablesData.get(table_name)
         id = condition[1]
         value = condition[3]
         condition = condition[2]
-        data = self.tablesData.get(table_name)
         new_data = []
+
         header = data.get("header")
         rows = data.get("data")
         print(header)
         column_indices = header.index(id) 
         for row in rows:
             cell = row[column_indices]
-            if condition == "=" and float(cell) == float(value):
+            if condition == "=" and float(cell) == value:
                 new_data.append(row)
-            elif condition == "!=" and float(cell) != float(value):
+            elif condition == "!=" and float(cell) != value:
                 new_data.append(row)
-            elif condition == "<" and float(cell) < float(value):
+            elif condition == "<" and float(cell) < value:
                 new_data.append(row)
-            elif condition == ">" and float(cell) > float(value):
+            elif condition == ">" and float(cell) > value:
                 new_data.append(row)
-            elif condition == "<=" and float(cell) <= float(value):
+            elif condition == "<=" and float(cell) <= value:
                 new_data.append(row)
-            elif condition == ">=" and float(cell) >= float(value):
+            elif condition == ">=" and float(cell) >= value:
+                new_data.append(row)
+
+        print(new_data)
+
+    def select_where_limit(self, table_name, condition, limit):
+        if table_name == "":
+            print("Table name is empty")
+            return None
+        if table_name not in self.tablesData:
+            print(f"Table {table_name} does not exist.")
+            return None
+        data = self.tablesData.get(table_name)
+        id = condition[1]
+        value = condition[3]
+        condition = condition[2]
+        new_data = []
+
+        header = data.get("header")
+        rows = data.get("data")
+        print(header)
+        column_indices = header.index(id) 
+        for row in rows[:int(limit)]:
+            cell = row[column_indices]
+            if condition == "=" and float(cell) == value:
+                new_data.append(row)
+            elif condition == "!=" and float(cell) != value:
+                new_data.append(row)
+            elif condition == "<" and float(cell) < value:
+                new_data.append(row)
+            elif condition == ">" and float(cell) > value:
+                new_data.append(row)
+            elif condition == "<=" and float(cell) <= value:
+                new_data.append(row)
+            elif condition == ">=" and float(cell) >= value:
                 new_data.append(row)
 
         print(new_data)
