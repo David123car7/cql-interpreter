@@ -77,9 +77,11 @@ class Interpreter:
         elif cmd == "CREATE_TABLE_SELECT_WHERE_LIMIT":
             self.create_table_select_where(command[1], command[2], command[3], command[4])
         elif cmd == "PROCEDURE":
-            self.procedure(command[1], command[2])
+            self.store_procedure(command[1], command[2])
         elif cmd == "CREATE_TABLE_FROM_JOIN":
             self.create_table_from_join(command[1], command[2], command[3], command[4])
+        elif cmd == "CALL":
+            self.call_procedure(command[1])
 
     def import_table(self, table_name, filename):
         """
@@ -306,7 +308,8 @@ class Interpreter:
         self.tablesData[new_table] = self.select_where(table_name, condition, limit)
         print(f"Table {new_table} created from {table_name} with condition {condition}")
 
-    def procedure(self, name, command):
+
+    def store_procedure(self, name, command):
         """
         Create a procedure with the given name and command.
         Args:
@@ -315,18 +318,32 @@ class Interpreter:
         Returns:
             None
         """
-        if name in self.tablesData:
+        if name in self.procedures:
             print(f"Procedure {name} already exists.")
             return False
-        
-        if command == "":
+        if not command:
             print("Command is empty")
             return False
+        self.procedures[name] = command
+        print(f"Procedure '{name}' stored successfully.")
 
-        for cmd in command:
+    def call_procedure(self, name):
+        """
+        Execute a stored procedure by its name.
+        Args:
+            name (str): Name of the procedure to call.
+        Returns:
+            None
+        """
+        if name not in self.procedures:
+            print(f"Procedure {name} does not exist.")
+            return False
+        
+        for cmd in self.procedures[name]:
             self.execute(cmd)
     
     def create_table_from_join(self, new_table, table_name1, table_name2, id):
+        print(table_name1, table_name2, id)
         if table_name1 == "":
             print("Table name is empty")
             return None
@@ -360,9 +377,11 @@ class Interpreter:
             join_val = row1[index1]
             for row2 in data2["data"]:
                 if row2[index2] == join_val:
-                    new_row = row1 + [
-                        row2[i] for i in range(len(row2)) if data2["header"][i] != id
-                    ]
+                    if row1[index1] == row2[index2]:
+                        new_row = row1 + [
+                            row2[i] for i in range(len(row2)) if i != index2
+                        ]
+                        new_tableData.append(new_row)
                     print(new_row)
                     new_tableData.append(new_row)
         

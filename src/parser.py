@@ -27,7 +27,8 @@ class Parser:
             | export_command
             | rename_command
             | print_command
-            | discard_command"""
+            | discard_command
+            | call_command"""
         p[0] = p[1]
 
     def p_command(self, p):
@@ -186,6 +187,10 @@ class Parser:
         """procedure : PROCEDURE ID DO procedure_command END"""
         print(f"Creating procedure {p[2]} with commands {p[4]}")
         p[0] = ("PROCEDURE", p[2], p[4])
+
+    def p_call_command(self, p):
+        """call_command : CALL ID SEMICOLON"""
+        p[0] = ("CALL", p[2])
     #endregion
 
     def p_error(self, p):
