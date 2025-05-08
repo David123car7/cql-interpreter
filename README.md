@@ -20,8 +20,6 @@ The main goal is to allow users to perform data query and manipulation operation
 
 ## 🚀 How to Run
 
-### Table Commands
-
 1. **Clone the repository:**
 
    ```bash
@@ -33,17 +31,20 @@ The main goal is to allow users to perform data query and manipulation operation
    ```bash
    pip install ply
    
-3. **Run the interpreter Interactive Mode:**
+3. **Run the interpreter in Interactive Mode:**
    
       ```bash
    python cql_interpreter.py
 
-4. **Run the interpreter File Mode:**
+4. **Run the interpreter in File Mode:**
    
       ```bash
    python cql_interpreter.py files/entrada.fca
 
+
 ## 💻 Language Syntax
+
+### Table Commands
 
 - Import a table from a CSV file:
   ```
