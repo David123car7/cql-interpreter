@@ -20,6 +20,8 @@ The main goal is to allow users to perform data query and manipulation operation
 
 ## 🚀 How to Run
 
+### Table Commands
+
 1. **Clone the repository:**
 
    ```bash
