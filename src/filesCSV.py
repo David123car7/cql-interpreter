@@ -1,4 +1,5 @@
 import csv
+import re
 
 class FilesCSV:
     def read_csv(self, filename):
@@ -9,14 +10,19 @@ class FilesCSV:
                 try:
                     data = []
                     header = None
+                    WRAP_RX = re.compile(r'(\[.*?\])')
 
                     with open(filename, "r", newline="") as csvfile:
-                        reader = csv.reader(csvfile)
+                        lines = (
+                            WRAP_RX.sub(r'"\1"', raw)
+                            for raw in csvfile
+                            if raw.strip() and not raw.lstrip().startswith("#")
+                        )
+                        reader = csv.reader(lines)
                         for row in reader:
                             if row and row[0].startswith("#"):
                                 continue
 
-                            # First line is the header
                             if header is None:
                                 header = row
                             else:
@@ -41,3 +47,4 @@ class FilesCSV:
          except Exception as e:
             print(f"Error writing CSV file: {str(e)}")
             return None
+

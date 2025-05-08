@@ -48,7 +48,8 @@ class Parser:
         """create_table : create_table_select_no_limit
         | create_table_select_where_no_limit
         | create_table_select_limit
-        | create_table_select_where_limit"""
+        | create_table_select_where_limit
+        | create_table_from_join"""
         p[0] = p[1]
     
     #region Table commands
@@ -165,6 +166,10 @@ class Parser:
          """create_table_select_where_limit : CREATE TABLE ID select_where_command_limit"""
          selectWhere = p[4]
          p[0] = ("CREATE_TABLE_SELECT_WHERE_LIMIT", p[3], selectWhere[1], selectWhere[2], selectWhere[3])
+
+    def p_create_table_from_join(self, p):
+        """create_table_from_join : CREATE TABLE ID FROM ID JOIN ID USING LPAREN STRING RPAREN SEMICOLON"""
+        p[0] = ("CREATE_TABLE_FROM_JOIN", p[3], p[5], p[7], p[10])
     #endregion
     
     #region Procedures

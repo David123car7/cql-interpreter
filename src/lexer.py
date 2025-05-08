@@ -30,6 +30,8 @@ class Lexer:
         'NUMBER',
         'EQUALS',
         'NOT_EQUALS',
+        'LPAREN',
+        'RPAREN',
         'LESS_THAN',
         'LESS_EQUALS',
         'GREATER_THAN',
@@ -40,6 +42,8 @@ class Lexer:
         ] + list(reserved.values())
     
     t_COMMA = r'\,'
+    t_LPAREN = r'\('
+    t_RPAREN = r'\)'
     t_SEMICOLON = r';'
     t_EQUALS = r'='
     t_NOT_EQUALS = r'<>'

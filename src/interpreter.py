@@ -78,6 +78,8 @@ class Interpreter:
             self.create_table_select_where(command[1], command[2], command[3], command[4])
         elif cmd == "PROCEDURE":
             self.procedure(command[1], command[2])
+        elif cmd == "CREATE_TABLE_FROM_JOIN":
+            self.create_table_from_join(command[1], command[2], command[3], command[4])
 
     def import_table(self, table_name, filename):
         """
@@ -278,13 +280,13 @@ class Interpreter:
     def create_table_select(self, new_table, table_name, limit=None):
         if table_name == "":
             print("Table name is empty")
-            return False
+            return None
         if table_name not in self.tablesData:
             print(f"Table {table_name} does not exist.")
-            return False
+            return None
         if new_table in self.tablesData:
             print(f"Table {new_table} already exists.")
-            return False
+            return None
         
         self.tablesData[new_table]= self.select_table(table_name, limit)
         print(f"Table {new_table} created from {table_name}.")
@@ -299,7 +301,7 @@ class Interpreter:
             return None
         if new_table in self.tablesData:
             print(f"Table {new_table} already exists.")
-            return False
+            return None
         
         self.tablesData[new_table] = self.select_where(table_name, condition, limit)
         print(f"Table {new_table} created from {table_name} with condition {condition}")
@@ -323,3 +325,49 @@ class Interpreter:
 
         for cmd in command:
             self.execute(cmd)
+    
+    def create_table_from_join(self, new_table, table_name1, table_name2, id):
+        if table_name1 == "":
+            print("Table name is empty")
+            return None
+        if table_name1 not in self.tablesData:
+            print(f"Table {table_name1} does not exist.")
+            return None
+        if table_name2 == "":
+            print("Table name is empty")
+            return None
+        if table_name2 not in self.tablesData:
+            print(f"Table {table_name2} does not exist.")
+            return None
+        if new_table in self.tablesData:
+            print(f"Table {new_table} already exists.")
+            return None
+        
+        data1 = self.tablesData[table_name1]
+        data2 = self.tablesData[table_name2]
+        header1 = data1.get("header")
+        header2 = data2.get("header")
+
+        if id not in header1 or id not in header2:
+            print(f"Column {id} does not exist in one of the tables.")
+            return None
+        
+        index1 = header1.index(id)
+        index2 = header2.index(id)
+        new_header = header1 + [col for col in header2 if col != id]
+        new_tableData = []
+        for row1 in data1["data"]:
+            join_val = row1[index1]
+            for row2 in data2["data"]:
+                if row2[index2] == join_val:
+                    new_row = row1 + [
+                        row2[i] for i in range(len(row2)) if data2["header"][i] != id
+                    ]
+                    print(new_row)
+                    new_tableData.append(new_row)
+        
+        # Store result
+        self.tablesData[new_table] = {"header": new_header, "data": new_tableData}
+        
+
+

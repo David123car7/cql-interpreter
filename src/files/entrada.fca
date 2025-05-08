@@ -1,7 +1,4 @@
-PROCEDURE atualizar_observacoes DO
 IMPORT TABLE observacoes FROM "observacoes.csv";
-CREATE TABLE mais_quentes SELECT * FROM observacoes WHERE Temperatura > 22 ;
-EXPORT TABLE mais_quentes AS "teste2.csv";
-END
-
-
+IMPORT TABLE estacoes FROM "estacoes.csv";
+CREATE TABLE teste FROM estacoes JOIN observacoes USING("Id");
+EXPORT TABLE teste as "kazzio.csv";
