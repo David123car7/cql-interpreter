@@ -31,12 +31,12 @@ The main goal is to allow users to perform data query and manipulation operation
    ```bash
    pip install ply
    
-3. **Run the interpreter No File:**
+3. **Run the interpreter in Interactive Mode:**
    
       ```bash
    python cql_interpreter.py
 
-4. **Run the interpreter With File:**
+4. **Run the interpreter in File Mode:**
    
       ```bash
    python cql_interpreter.py files/entrada.fca
