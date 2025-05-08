@@ -1,4 +1,5 @@
 IMPORT TABLE observacoes FROM "observacoes.csv";
 IMPORT TABLE estacoes FROM "estacoes.csv";
-CREATE TABLE teste FROM estacoes JOIN observacoes USING("Id");
-EXPORT TABLE teste as "kazzio.csv";
+SELECT Temperatura FROM observacoes LIMIT 1;
+
+

@@ -185,7 +185,6 @@ class Parser:
 
     def p_procedure(self, p):
         """procedure : PROCEDURE ID DO procedure_command END"""
-        print(f"Creating procedure {p[2]} with commands {p[4]}")
         p[0] = ("PROCEDURE", p[2], p[4])
 
     def p_call_command(self, p):

@@ -26,6 +26,9 @@ class FilesCSV:
                             if header is None:
                                 header = row
                             else:
+                                if(len(row) != len(header)):
+                                    print(f"Row length mismatch: {len(row)} != {len(header)}")
+                                    return None
                                 data.append(row)
 
                     return {"header": header, "data": data}

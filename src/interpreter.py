@@ -57,25 +57,25 @@ class Interpreter:
         elif cmd == "DISCARD":
             self.discard_table(command[1])
         elif cmd == "SELECT_NO_LIMIT":
-            self.select_table(command[1])
+            self.select_table(command[1], 0 , should_print=True)
         elif cmd == "SELECT_LIMIT":
-            self.select_table(command[1], command[2])
+            self.select_table(command[1], command[2], should_print=True)
         elif cmd == "SELECT_SPECIFIC_NO_LIMIT":
-            self.select_specific(command[2], command[1])
+            self.select_specific(command[2], command[1], 0, should_print=True)
         elif cmd == "SELECT_SPECIFIC_LIMIT":
-            self.select_specific(command[2], command[1], command[3])
+            self.select_specific(command[2], command[1], command[3], should_print=True)
         elif cmd == "SELECT_WHERE_NO_LIMIT":
-            self.select_where(command[1], command[2])
+            self.select_where(command[1], command[2], 0, should_print=True)
         elif cmd == "SELECT_WHERE_LIMIT":
-            self.select_where(command[1], command[2], command[3])
+            self.select_where(command[1], command[2], command[3], should_print=True)
         elif cmd == "CREATE_TABLE_SELECT_NO_LIMIT":
-            self.create_table_select(command[1], command[2])
+            self.create_table_select(command[1], command[2], 0, should_print=False)
         elif cmd == "CREATE_TABLE_SELECT_LIMIT":
-            self.create_table_select(command[1], command[2], command[3])
+            self.create_table_select(command[1], command[2], command[3], should_print=False)
         elif cmd == "CREATE_TABLE_SELECT_WHERE_NO_LIMIT":
-            self.create_table_select_where(command[1],command[2], command[3])
+            self.create_table_select_where(command[1],command[2], command[3], 0, should_print=False)
         elif cmd == "CREATE_TABLE_SELECT_WHERE_LIMIT":
-            self.create_table_select_where(command[1], command[2], command[3], command[4])
+            self.create_table_select_where(command[1], command[2], command[3], command[4], should_print=False)
         elif cmd == "PROCEDURE":
             self.store_procedure(command[1], command[2])
         elif cmd == "CREATE_TABLE_FROM_JOIN":
@@ -152,7 +152,7 @@ class Interpreter:
         else:
             print(f"Table {table_name} not found.")
 
-    def select_table(self, table_name, limit=None):
+    def select_table(self, table_name, limit, should_print):
         """
         Print all rows (up to optional limit) of a table.
         Args:
@@ -171,18 +171,19 @@ class Interpreter:
 
         selectedTable = []
         data = self.tablesData[table_name]
-        dataLimit = int(limit) if limit is not None else None
+        dataLimit = int(limit) if limit != 0 else None
         header = data.get("header")
         rows = data.get("data")
         for row in rows[:dataLimit]:
             selectedTable.append(row)
         
-        print(header)
-        print(selectedTable)
+        if(should_print == True):
+            print(header)
+            print(selectedTable)
         return {"header": header, "data": selectedTable}
 
 
-    def select_specific(self, table_name, columns, limit=None):
+    def select_specific(self, table_name, columns, limit, should_print):
         """
         Return selected rows from a table based on one or more numerical conditions.
 
@@ -214,17 +215,18 @@ class Interpreter:
 
         selectedTable = []
         column_indices = [header.index(col) for col in columns]
-        dataLimit = int(limit) if limit is not None else None
+        dataLimit = int(limit) if limit != 0 else None
         for row in rows[:dataLimit]:
             selected_row = [row[i] for i in column_indices]
             selectedTable.append(selected_row)
-        
-        print(columns)
-        print(selectedTable)
+
+        if(should_print == True):
+            print(columns)
+            print(selectedTable)
         return {"header": columns, "data": selectedTable}
 
 
-    def select_where(self, table_name, condition, limit=None):
+    def select_where(self, table_name, condition, limit, should_print):
         if table_name == "":
             print("Table name is empty")
             return None
@@ -233,7 +235,7 @@ class Interpreter:
             return None
         
         data = self.tablesData.get(table_name)
-        dataLimit = int(limit) if limit is not None else None
+        dataLimit = int(limit) if limit != 0 else None
         intermediate = {}
 
         index = 0
@@ -274,12 +276,13 @@ class Interpreter:
                 break
         else:
             parsed_data = intermediate[0]
-        
-        print(header)
-        print(parsed_data)
+
+        if(should_print == True):
+            print(header)
+            print(parsed_data)
         return {"header": header, "data": parsed_data}
     
-    def create_table_select(self, new_table, table_name, limit=None):
+    def create_table_select(self, new_table, table_name, limit, should_print):
         if table_name == "":
             print("Table name is empty")
             return None
@@ -290,11 +293,11 @@ class Interpreter:
             print(f"Table {new_table} already exists.")
             return None
         
-        self.tablesData[new_table]= self.select_table(table_name, limit)
+        self.tablesData[new_table]= self.select_table(table_name, limit, should_print)
         print(f"Table {new_table} created from {table_name}.")
         return True
     
-    def create_table_select_where(self, new_table, table_name, condition, limit=None):
+    def create_table_select_where(self, new_table, table_name, condition, limit, should_print):
         if table_name == "":
             print("Table name is empty")
             return None
@@ -305,7 +308,7 @@ class Interpreter:
             print(f"Table {new_table} already exists.")
             return None
         
-        self.tablesData[new_table] = self.select_where(table_name, condition, limit)
+        self.tablesData[new_table] = self.select_where(table_name, condition, limit, should_print)
         print(f"Table {new_table} created from {table_name} with condition {condition}")
 
 
@@ -343,7 +346,6 @@ class Interpreter:
             self.execute(cmd)
     
     def create_table_from_join(self, new_table, table_name1, table_name2, id):
-        print(table_name1, table_name2, id)
         if table_name1 == "":
             print("Table name is empty")
             return None
@@ -377,16 +379,12 @@ class Interpreter:
             join_val = row1[index1]
             for row2 in data2["data"]:
                 if row2[index2] == join_val:
-                    if row1[index1] == row2[index2]:
-                        new_row = row1 + [
-                            row2[i] for i in range(len(row2)) if i != index2
-                        ]
-                        new_tableData.append(new_row)
-                    print(new_row)
+                    new_row = row1 + [
+                        row2[i] for i in range(len(row2)) if header2[i] != id
+                    ]
                     new_tableData.append(new_row)
-        
-        # Store result
+                    
         self.tablesData[new_table] = {"header": new_header, "data": new_tableData}
-        
+        print(f"Table {new_table} created from join of {table_name1} and {table_name2} using the column {id}.")
 
 
