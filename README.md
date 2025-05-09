@@ -24,7 +24,6 @@ The main goal is to allow users to perform data query and manipulation operation
 
    ```bash
    git clone https://github.com/David123car7/cql-interpreter.git
-
    
 2. **Install dependencies::**
 
@@ -40,6 +39,11 @@ The main goal is to allow users to perform data query and manipulation operation
    
       ```bash
    python cql_interpreter.py files/entrada.fca
+
+5. **If using Virtual Environment:**
+
+   ```bash
+   ./venv/bin/python cql_interpreter.py
 
 
 ## 💻 Language Syntax
