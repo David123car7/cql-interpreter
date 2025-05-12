@@ -127,16 +127,21 @@ class Parser:
         p[0] = p[1] + [p[3]]
 
     def p_condition(self, p):
-        """condition : ID EQUALS NUMBER
-        | ID NOT_EQUALS NUMBER
-        | ID LESS_THAN NUMBER
-        | ID GREATER_THAN NUMBER
-        | ID LESS_EQUALS NUMBER
-        | ID GREATER_EQUALS NUMBER"""
+        """condition : ID EQUALS value
+        | ID NOT_EQUALS value
+        | ID LESS_THAN value
+        | ID GREATER_THAN value
+        | ID LESS_EQUALS value
+        | ID GREATER_EQUALS value"""
         if len(p) == 4 and p[2] != "AND":
             p[0] = ("CONDITION", p[1], p[2], p[3])
         elif len(p) == 4 and p[2] == "AND":
             p[0] = ("AND", p[1], p[3])
+    
+    def p_value(self, p):
+        """value : STRING
+        | NUMBER"""
+        p[0] = p[1]
     
     def p_select_list_multi(self, p):
         "select_list : select_list COMMA ID"

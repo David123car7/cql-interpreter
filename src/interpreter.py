@@ -19,7 +19,8 @@ class Interpreter:
         self.parser = Parser()
         self.filesCSV = FilesCSV()
         self.tablesData = {}
-        self.filePath = "files/"
+        self.filePath = "Data/"
+        self.exportPath = "Output/"
         self.procedures = {}
 
     def run(self, data):
@@ -108,7 +109,7 @@ class Interpreter:
         if table_name not in self.tablesData:
             print(f"Table {table_name} does not exist.")
             return
-        self.filesCSV.write_csv(filename, self.tablesData[table_name])
+        self.filesCSV.write_csv(self.exportPath + filename, self.tablesData[table_name])
 
     def rename_table(self, table_name, new_name):
         """
@@ -176,10 +177,8 @@ class Interpreter:
         rows = data.get("data")
         for row in rows[:dataLimit]:
             selectedTable.append(row)
-        
         if(should_print == True):
-            print(header)
-            print(selectedTable)
+            self.print_Table(table_name)
         return {"header": header, "data": selectedTable}
 
 
@@ -221,8 +220,7 @@ class Interpreter:
             selectedTable.append(selected_row)
 
         if(should_print == True):
-            print(columns)
-            print(selectedTable)
+            self.print_data(columns, selectedTable)
         return {"header": columns, "data": selectedTable}
 
 
@@ -278,8 +276,7 @@ class Interpreter:
             parsed_data = intermediate[0]
 
         if(should_print == True):
-            print(header)
-            print(parsed_data)
+           self.print_data(header, parsed_data)
         return {"header": header, "data": parsed_data}
     
     def create_table_select(self, new_table, table_name, limit, should_print):
@@ -387,4 +384,34 @@ class Interpreter:
         self.tablesData[new_table] = {"header": new_header, "data": new_tableData}
         print(f"Table {new_table} created from join of {table_name1} and {table_name2} using the column {id}.")
 
+    def print_Table(self, table_name):
+        """
+        Print the contents of a table.
+        Args:
+            table_name (str): Name of the table to print.
+        Returns:
+            None
+        """
+        print(f"Table {table_name}:")
+        if table_name in self.tablesData:
+            
+            data = self.tablesData[table_name]
+            header = data.get("header")
+            rows = data.get("data")
+            print(header)
+            for row in rows:
+                print(row)
+        else:
+            print(f"Table {table_name} does not exist.")
 
+    def print_data(self, header, data):
+        """
+        Print the contents of a data object.
+        Args:
+            data (dict): Data object to print.
+        Returns:
+            None
+        """
+        print(header)
+        for row in data:
+            print(row)

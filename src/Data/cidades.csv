@@ -1,0 +1,5 @@
+Id,Local,Coordenadas,Altitude,Tipo,Ativo
+1,"Serra da Estrela / Torre","[-7.6128,40.3219]",1993,"Montanha",True
+2,"Faro / Aeroporto","[-7.9629,37.0146]",7,"Estação",True
+3,"Covilhã / Penhas da Saúde","[-7.5375,40.3028]",1500,"Montanha",False
+4,"Lisboa / Centro","[-9.1393,38.7223]",45,"Cidade",True

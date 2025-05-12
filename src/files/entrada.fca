@@ -1,5 +1,0 @@
-IMPORT TABLE observacoes FROM "observacoes.csv";
-IMPORT TABLE estacoes FROM "estacoes.csv";
-SELECT Temperatura FROM observacoes LIMIT 1;
-
-

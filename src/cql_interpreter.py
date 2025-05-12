@@ -4,7 +4,7 @@ import sys
 class Main:
     interpreter = Interpreter()
 
-    with open("files/procedures.fca", "r") as file:
+    with open("Input/procedures.fca", "r") as file:
                     contents = file.read()
                     interpreter.run(contents)
     

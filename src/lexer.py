@@ -82,7 +82,7 @@ class Lexer:
         pass
 
     def t_COMMENTS(self, t):
-        r"-[\s\S]*?-"
+        r"\{-[\s\S]*?-\}"
         pass
 
     def t_error(self, t):

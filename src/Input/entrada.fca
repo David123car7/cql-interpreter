@@ -1,0 +1,5 @@
+IMPORT TABLE cidades FROM "cidades.csv";
+SELECT * FROM cidades WHERE Altitude > 1000;
+SELECT * FROM cidades WHERE Tipo = "Montanha";
+EXPORT TABLE cidades AS "city.csv";
+
