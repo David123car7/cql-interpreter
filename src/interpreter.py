@@ -19,11 +19,11 @@ class Interpreter:
         self.parser = Parser()
         self.filesCSV = FilesCSV()
         self.tablesData = {}
-        self.filePath = "Data/"
-        self.exportPath = "Output/"
+        self.filePath = "data/"
+        self.exportPath = "output/"
         self.procedures = {}
 
-    def run(self, data):
+    def run(self, data, print_result):
         """
         Parse and execute a block of CQL commands.
         Args:
@@ -36,9 +36,9 @@ class Interpreter:
             print("No result from parser")
             return None
         for cmd in result:
-            self.execute(cmd)
+            return self.execute(cmd, print_result)
 
-    def execute(self, command):
+    def execute(self, command, print_result):
         """
         Dispatch and execute a single parsed command tuple.
         Args:
@@ -48,41 +48,77 @@ class Interpreter:
         """
         cmd = command[0]
         if cmd == "IMPORT":
-            self.import_table(command[1], command[2])
+            x = self.import_table(command[1], command[2])
+            if print_result == True: print(x)
+            return x
         elif cmd == "EXPORT":
-            self.export_table(command[1], command[2])
+            x = self.export_table(command[1], command[2])
+            if print_result == True: print(x)
+            return x
         elif cmd == "RENAME":
-            self.rename_table(command[1], command[2])
+            x = self.rename_table(command[1], command[2])
+            if print_result == True: print(x)
+            return x
         elif cmd == "PRINT":
-            self.print_table(command[1])
+            x = self.print_table(command[1])
+            if print_result == True: print(x)
+            return x
         elif cmd == "DISCARD":
-            self.discard_table(command[1])
+            x = self.discard_table(command[1])
+            if print_result == True: print(x)
+            return x
         elif cmd == "SELECT_NO_LIMIT":
-            self.select_table(command[1], 0 , should_print=True)
+            x = self.select_table(command[1], 0)
+            if print_result == True: print(x)
+            return x
         elif cmd == "SELECT_LIMIT":
-            self.select_table(command[1], command[2], should_print=True)
+            x = self.select_table(command[1], command[2])
+            print(x)
+            return x
         elif cmd == "SELECT_SPECIFIC_NO_LIMIT":
-            self.select_specific(command[2], command[1], 0, should_print=True)
+            x = self.select_specific(command[2], command[1], 0)
+            if print_result == True: print(x)
+            return x
         elif cmd == "SELECT_SPECIFIC_LIMIT":
-            self.select_specific(command[2], command[1], command[3], should_print=True)
+            x = self.select_specific(command[2], command[1], command[3])
+            if print_result == True: print(x)
+            return x
         elif cmd == "SELECT_WHERE_NO_LIMIT":
-            self.select_where(command[1], command[2], 0, should_print=True)
+            x = self.select_where(command[1], command[2], 0)
+            if print_result == True: print(x)
+            return x
         elif cmd == "SELECT_WHERE_LIMIT":
-            self.select_where(command[1], command[2], command[3], should_print=True)
+            x = self.select_where(command[1], command[2], command[3])
+            if print_result == True: print(x)
+            return x
         elif cmd == "CREATE_TABLE_SELECT_NO_LIMIT":
-            self.create_table_select(command[1], command[2], 0, should_print=False)
+            x = self.create_table_select(command[1], command[2], 0)
+            if print_result == True: print(x)
+            return x
         elif cmd == "CREATE_TABLE_SELECT_LIMIT":
-            self.create_table_select(command[1], command[2], command[3], should_print=False)
+            x = self.create_table_select(command[1], command[2], command[3])
+            if print_result == True: print(x)
+            return x
         elif cmd == "CREATE_TABLE_SELECT_WHERE_NO_LIMIT":
-            self.create_table_select_where(command[1],command[2], command[3], 0, should_print=False)
+            x = self.create_table_select_where(command[1],command[2], command[3], 0)
+            if print_result == True: print(x)
+            return x
         elif cmd == "CREATE_TABLE_SELECT_WHERE_LIMIT":
-            self.create_table_select_where(command[1], command[2], command[3], command[4], should_print=False)
+            x = self.create_table_select_where(command[1], command[2], command[3], command[4])
+            if print_result == True: print(x)
+            return x
         elif cmd == "PROCEDURE":
-            self.store_procedure(command[1], command[2])
+            x = self.store_procedure(command[1], command[2])
+            if print_result == True: print(x)
+            return x
         elif cmd == "CREATE_TABLE_FROM_JOIN":
-            self.create_table_from_join(command[1], command[2], command[3], command[4])
+            x = self.create_table_from_join(command[1], command[2], command[3], command[4])
+            if print_result == True: print(x)
+            return x
         elif cmd == "CALL":
-            self.call_procedure(command[1])
+            x = self.call_procedure(command[1])
+            if print_result == True: print(x)
+            return x
 
     def import_table(self, table_name, filename):
         """
@@ -91,11 +127,14 @@ class Interpreter:
             table_name (str): Name to assign to the imported table.
             filename (str): CSV filename to read (relative to filePath).
         Returns:
-            None
+            str: Result
         """
         data = self.filesCSV.read_csv(self.filePath + filename)
         if data:
             self.tablesData[table_name] = data
+            return f"Table '{table_name}' imported successfully"
+        else:
+            return f"Table {table_name} was not imported"
 
     def export_table(self, table_name, filename):
         """
@@ -104,12 +143,17 @@ class Interpreter:
             table_name (str): Name of the table to export.
             filename (str): Destination CSV filename.
         Returns:
-            None
+            str: Result
         """
         if table_name not in self.tablesData:
-            print(f"Table {table_name} does not exist.")
-            return
-        self.filesCSV.write_csv(self.exportPath + filename, self.tablesData[table_name])
+            return f"Table {table_name} does not exist."
+        
+        result = self.filesCSV.write_csv(self.exportPath + filename, self.tablesData[table_name])
+        if(result):
+            return f"Table '{table_name}' exported successfully"
+        else:
+            return f"Table '{table_name}' was not exported successfully"
+
 
     def rename_table(self, table_name, new_name):
         """
@@ -118,27 +162,34 @@ class Interpreter:
             table_name (str): Current name of the table.
             new_name (str): New name for the table.
         Returns:
-            None
+            str: Result
         """
         if table_name in self.tablesData:
             self.tablesData[new_name] = self.tablesData.pop(table_name)
-            print(f"Table {table_name} renamed to {new_name}.")
+            return(f"Table {table_name} renamed to {new_name}.")
         else:
-            print(f"Table {table_name} does not exist.")
+            return(f"Table {table_name} does not exist.")
 
     def print_table(self, table_name):
         """
-        Print an in-memory table's contents.
+        Print the contents of a table.
         Args:
             table_name (str): Name of the table to print.
         Returns:
-            None
+            str: Result
         """
+        print(f"Table {table_name}:")
         if table_name in self.tablesData:
+            
             data = self.tablesData[table_name]
-            print(data)
+            header = data.get("header")
+            rows = data.get("data")
+            print(header)
+            for row in rows:
+                print(row)
+            return(f"Table {table_name} was printed.")
         else:
-            print(f"Table {table_name} does not exist.")
+            return(f"Table {table_name} was not printed.")
 
     def discard_table(self, table_name):
         """
@@ -146,14 +197,15 @@ class Interpreter:
         Args:
             table_name (str): Name of the table to discard.
         Returns:
-            None
+            str: Result
         """
         if table_name in self.tablesData:
             self.tablesData.pop(table_name)
+            return(f"Table {table_name} was discarded.")
         else:
-            print(f"Table {table_name} not found.")
+            return(f"Table {table_name} not found.")
 
-    def select_table(self, table_name, limit, should_print):
+    def select_table(self, table_name, limit):
         """
         Print all rows (up to optional limit) of a table.
         Args:
@@ -164,25 +216,24 @@ class Interpreter:
                 'data' (list of rows), or None if invalid.
         """
         if not table_name:
-            print("Table name is empty")
-            return None
+                print("Table name is empty")
+                return None
         if table_name not in self.tablesData:
             print(f"Table {table_name} does not exist.")
             return None
 
-        selectedTable = []
-        data = self.tablesData[table_name]
-        dataLimit = int(limit) if limit != 0 else None
-        header = data.get("header")
-        rows = data.get("data")
-        for row in rows[:dataLimit]:
-            selectedTable.append(row)
-        if(should_print == True):
-            self.print_Table(table_name)
-        return {"header": header, "data": selectedTable}
+        selectedTable = self.get_table_data(table_name, limit)
+        if selectedTable is None:
+            return(f"Table {table_name} not found.")
+
+        header = selectedTable.get("header")
+        data = selectedTable.get("data")
+        self.print_data(header, data)
+        return(f"Table {table_name} was selected.")
 
 
-    def select_specific(self, table_name, columns, limit, should_print):
+
+    def select_specific(self, table_name, columns, limit):
         """
         Return selected rows from a table based on one or more numerical conditions.
 
@@ -203,83 +254,29 @@ class Interpreter:
             print(f"Table {table_name} does not exist.")
             return None
 
-        data = self.tablesData[table_name]
-        header = data.get("header")
-        rows = data.get("data")
-
-        for col in columns:
-            if col not in header:
-                print(f"Column {col} does not exist in table {table_name}.")
-                return None
-
         selectedTable = []
-        column_indices = [header.index(col) for col in columns]
-        dataLimit = int(limit) if limit != 0 else None
-        for row in rows[:dataLimit]:
-            selected_row = [row[i] for i in column_indices]
-            selectedTable.append(selected_row)
+        selectedTable = self.get_table_data_specific(table_name, columns, limit)
+        if selectedTable is None:
+            return(f"{columns} was not selected from table {table_name}.")
 
-        if(should_print == True):
-            self.print_data(columns, selectedTable)
-        return {"header": columns, "data": selectedTable}
+        self.print_data(selectedTable["header"], selectedTable["data"])
+        return(f"{columns} was selected from table {table_name}.")
 
-
-    def select_where(self, table_name, condition, limit, should_print):
+    def select_where(self, table_name, condition, limit):
         if table_name == "":
-            print("Table name is empty")
-            return None
+            return("Table name is empty")
         if table_name not in self.tablesData:
-            print(f"Table {table_name} does not exist.")
-            return None
+            return(f"Table {table_name} does not exist.")
+        selectedTable = []
+        selectedTable = self.get_table_data_where(table_name, condition, limit)
+        if selectedTable is None:
+            return(f"Table {table_name} was not selected with the condition {condition}.")
         
-        data = self.tablesData.get(table_name)
-        dataLimit = int(limit) if limit != 0 else None
-        intermediate = {}
+        self.print_data(selectedTable["header"], selectedTable["data"])
+        return(f"Table {table_name} was selected with the condition {condition}.")
 
-        index = 0
-        header = data.get("header")
-        rows = data.get("data")
-        for c in condition: 
-            filtered = []
-            for row in rows[:dataLimit]:
-                cell = row[header.index(c[1])]
-                cond = c[2]
-                value = c[3]
-                if cond == "=" and float(cell) == value:
-                    filtered.append(row)
-                elif cond == "!=" and float(cell) != value:
-                    filtered.append(row)
-                elif cond == "<" and float(cell) < value:
-                    filtered.append(row)
-                elif cond == ">" and float(cell) > value:
-                    filtered.append(row)
-                elif cond == "<=" and float(cell) <= value:
-                    filtered.append(row)
-                elif cond == ">=" and float(cell) >= value:
-                    filtered.append(row)
-            intermediate[index] = filtered
-            index += 1
-  
-        parsed_data = []
-        index = 0
-        dictLenght = len(intermediate)
-        if(dictLenght != 1):
-            for i in intermediate:
-                for j in intermediate[i]:
-                    if(i+1 > dictLenght):
-                        break
-                    for k in intermediate[i+1]:
-                        if(j[0] == k[0]):
-                            parsed_data.append(k)
-                break
-        else:
-            parsed_data = intermediate[0]
-
-        if(should_print == True):
-           self.print_data(header, parsed_data)
-        return {"header": header, "data": parsed_data}
-    
-    def create_table_select(self, new_table, table_name, limit, should_print):
+        
+    def create_table_select(self, new_table, table_name, limit):
         if table_name == "":
             print("Table name is empty")
             return None
@@ -290,11 +287,13 @@ class Interpreter:
             print(f"Table {new_table} already exists.")
             return None
         
-        self.tablesData[new_table]= self.select_table(table_name, limit, should_print)
-        print(f"Table {new_table} created from {table_name}.")
-        return True
+        newTable = self.get_table_data(table_name, limit)
+        if newTable is None:
+            return(f"Failed to retrieve data from table {table_name}.")
+        self.tablesData[new_table] = newTable
+        return(f"Table {new_table} created from {table_name}.")
     
-    def create_table_select_where(self, new_table, table_name, condition, limit, should_print):
+    def create_table_select_where(self, new_table, table_name, condition, limit):
         if table_name == "":
             print("Table name is empty")
             return None
@@ -304,9 +303,11 @@ class Interpreter:
         if new_table in self.tablesData:
             print(f"Table {new_table} already exists.")
             return None
-        
-        self.tablesData[new_table] = self.select_where(table_name, condition, limit, should_print)
-        print(f"Table {new_table} created from {table_name} with condition {condition}")
+        newTable = self.get_table_data_where(table_name, condition, limit)
+        if newTable is None:
+            return(f"Failed to retrieve data from table {table_name}.")
+        self.tablesData[new_table] = newTable
+        return(f"Table {new_table} created from {table_name} with condition {condition}")
 
 
     def store_procedure(self, name, command):
@@ -319,13 +320,11 @@ class Interpreter:
             None
         """
         if name in self.procedures:
-            print(f"Procedure {name} already exists.")
-            return False
+            return(f"Procedure {name} already exists.")
         if not command:
-            print("Command is empty")
-            return False
+            return("Command is empty")
         self.procedures[name] = command
-        print(f"Procedure '{name}' stored successfully.")
+        return(f"Procedure '{name}' stored successfully.")
 
     def call_procedure(self, name):
         """
@@ -336,11 +335,12 @@ class Interpreter:
             None
         """
         if name not in self.procedures:
-            print(f"Procedure {name} does not exist.")
-            return False
+            return(f"Procedure {name} does not exist.")
         
         for cmd in self.procedures[name]:
-            self.execute(cmd)
+            self.execute(cmd, False)
+        return(f"Procedure {name} was called.")
+
     
     def create_table_from_join(self, new_table, table_name1, table_name2, id):
         if table_name1 == "":
@@ -384,26 +384,6 @@ class Interpreter:
         self.tablesData[new_table] = {"header": new_header, "data": new_tableData}
         print(f"Table {new_table} created from join of {table_name1} and {table_name2} using the column {id}.")
 
-    def print_Table(self, table_name):
-        """
-        Print the contents of a table.
-        Args:
-            table_name (str): Name of the table to print.
-        Returns:
-            None
-        """
-        print(f"Table {table_name}:")
-        if table_name in self.tablesData:
-            
-            data = self.tablesData[table_name]
-            header = data.get("header")
-            rows = data.get("data")
-            print(header)
-            for row in rows:
-                print(row)
-        else:
-            print(f"Table {table_name} does not exist.")
-
     def print_data(self, header, data):
         """
         Print the contents of a data object.
@@ -415,3 +395,117 @@ class Interpreter:
         print(header)
         for row in data:
             print(row)
+    
+    
+    def get_table_data(self, table_name, limit):
+        """
+        Retrieves data from an in-memory table, optionally limited to a number of rows.
+
+        Parameters:
+            table_name (str): Name of the table to retrieve.
+            limit (int): Maximum number of rows to return. If 0, return all rows.
+
+        Returns:
+            dict: A array with 'header' and 'data' keys, or a message if the table doesn't exist.
+        """
+        if not table_name:
+            return None
+        if table_name not in self.tablesData:
+            return None
+
+        selectedTable = []
+        data = self.tablesData[table_name]
+        dataLimit = int(limit) if limit != 0 else None
+        header = data.get("header")
+        rows = data.get("data")
+        for row in rows[:dataLimit]:
+            selectedTable.append(row)
+        return {"header": header, "data": selectedTable}
+
+    def get_table_data_specific(self, table_name, columns, limit):
+        """
+        Return selected rows from a table based on one or more numerical conditions.
+
+        Args:
+            table_name (str): Name of the table to query.
+            condition (list of tuples): Each tuple describes a filter in the form
+                (column_name, operator, value)
+            limit (int, optional): Maximum number of rows to scan from the table.
+
+        Returns:
+            dict: A dictionary with keys 'header' (list of column names) and
+                'data' (list of rows matching all conditions), or None if invalid.
+        """
+        data = self.tablesData[table_name]
+        header = data.get("header")
+        rows = data.get("data")
+
+        for col in columns:
+            if col not in header:
+                return None
+
+        selectedTable = []
+        column_indices = [header.index(col) for col in columns]
+        dataLimit = int(limit) if limit != 0 else None
+        for row in rows[:dataLimit]:
+            selected_row = [row[i] for i in column_indices]
+            selectedTable.append(selected_row)
+
+        return {"header": columns, "data": selectedTable}
+
+    def get_table_data_where(self, table_name, condition, limit):
+        """
+        Filters table rows by specified conditions, optionally limited to a number of rows.
+
+        Parameters:
+            table_name (str): Name of the table to query.
+            conditions (list): List of conditions in the form (CONDITION, column, operator, value).
+            limit (int): Max number of rows to consider (0 means no limit).
+
+        Returns:
+            dict: A dictionary with 'header' and 'data' keys.
+        """
+        data = self.tablesData.get(table_name)
+        dataLimit = int(limit) if limit != 0 else None
+        intermediate = {}
+
+        index = 0
+        header = data.get("header")
+        rows = data.get("data")
+        for c in condition: 
+            filtered = []
+            for row in rows[:dataLimit]:
+                cell = row[header.index(c[1])]
+                cond = c[2]
+                value = c[3]
+                if cond == "=" and cell == value:
+                    filtered.append(row)
+                elif cond == "!=" and cell != value:
+                    filtered.append(row)
+                elif cond == "<" and cell < value:
+                    filtered.append(row)
+                elif cond == ">" and cell > value:
+                    filtered.append(row)
+                elif cond == "<=" and cell <= value:
+                    filtered.append(row)
+                elif cond == ">=" and cell >= value:
+                    filtered.append(row)
+            intermediate[index] = filtered
+            index += 1
+  
+        parsed_data = []
+        index = 0
+        dictLenght = len(intermediate)
+        if(dictLenght != 1):
+            for i in intermediate:
+                for j in intermediate[i]:
+                    if(i+1 > dictLenght):
+                        break
+                    for k in intermediate[i+1]:
+                        if(j[0] == k[0]):
+                            parsed_data.append(k)
+                break
+        else:
+            parsed_data = intermediate[0]
+
+        return {"header": header, "data": parsed_data}    

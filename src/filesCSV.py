@@ -47,6 +47,7 @@ class FilesCSV:
                 writer.writerow(data["header"])
                 for row in data["data"]:
                     writer.writerow(row)
+                return True
          except Exception as e:
             print(f"Error writing CSV file: {str(e)}")
             return None

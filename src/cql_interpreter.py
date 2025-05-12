@@ -6,13 +6,13 @@ class Main:
 
     with open("Input/procedures.fca", "r") as file:
                     contents = file.read()
-                    interpreter.run(contents)
+                    interpreter.run(contents, True)
     
     if len(sys.argv) == 2:
         try:
             with open(sys.argv[1], "r") as file:
                 contents = file.read()
-                result = interpreter.run(contents)
+                result = interpreter.run(contents, True)
         except Exception as e:
             print(e)    
     else:
@@ -22,7 +22,7 @@ class Main:
                 if(expr.strip().upper() == "EXIT"):
                     break
                 
-                result = interpreter.run(expr)
+                result = interpreter.run(expr, True)
             except Exception as e:
                 print(e)
 

@@ -1,5 +1,7 @@
-IMPORT TABLE cidades FROM "cidades.csv";
-SELECT * FROM cidades WHERE Altitude > 1000;
-SELECT * FROM cidades WHERE Tipo = "Montanha";
-EXPORT TABLE cidades AS "city.csv";
+IMPORT TABLE kazzio FROM "cidades.csv";
+SELECT * FROM kazzio;
+EXPORT TABLE observacoes AS "observacoes.csv"; 
+CALL atualizar_observacoes;
+
+
 
