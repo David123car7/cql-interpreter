@@ -24,38 +24,49 @@ The main goal is to allow users to perform data query and manipulation operation
 
    ```bash
    git clone https://github.com/David123car7/cql-interpreter.git
+   ```
    
 2. **Install dependencies::**
 
    ```bash
    pip install ply
+   ```
    
 3. **Run the interpreter in Interactive Mode:**
    
     ```bash
    python cql_interpreter.py
+    ```
 
 4. **Run the interpreter in File Mode:**
    
       ```bash
    python cql_interpreter.py files/entrada.fca
+      ```
 
 5. **If using Virtual Environment:**
 
    ```bash
    ./venv/bin/python cql_interpreter.py
+   ```
 
 
 ## 🚀 How to Run Tests
-
-  1. **Test the Interpreter**
-   ```bash
-     
-
-  1. **Test the Interpreter**
-   ```bash
    
+   **Test the Interpreter**
+   ```bash
+   python test/test_interpreter.py
+   ```
+   
+   **Test the Lexer**
+   ```bash
+   python test/test_lexer.py
+   ```
 
+   **Test the Parser**
+   ```bash
+   python test/test_parser.py
+   ```
 
 ## 💻 Language Syntax
 
