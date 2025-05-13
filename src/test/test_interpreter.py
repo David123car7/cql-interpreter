@@ -23,7 +23,7 @@ commands = [
 
 for command in commands:
     print("Input:", command)
-    output = interpreter.run(command, False)
+    output = interpreter.run(command, True)
     if output:
         print(output)
     print("-------------------------------------")

@@ -23,7 +23,7 @@ class Interpreter:
         self.exportPath = "output/"
         self.procedures = {}
 
-    def run(self, data, print_result):
+    def run(self, data, is_test):
         """
         Parse and execute a block of CQL commands.
         Args:
@@ -36,9 +36,12 @@ class Interpreter:
             print("No result from parser")
             return None
         for cmd in result:
-            return self.execute(cmd, print_result)
+            if(is_test == True):
+                return self.execute(cmd, is_test)
+            else:
+                self.execute(cmd, is_test)
 
-    def execute(self, command, print_result):
+    def execute(self, command, is_test):
         """
         Dispatch and execute a single parsed command tuple.
         Args:
@@ -49,75 +52,75 @@ class Interpreter:
         cmd = command[0]
         if cmd == "IMPORT":
             x = self.import_table(command[1], command[2])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "EXPORT":
             x = self.export_table(command[1], command[2])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "RENAME":
             x = self.rename_table(command[1], command[2])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "PRINT":
             x = self.print_table(command[1])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "DISCARD":
             x = self.discard_table(command[1])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "SELECT_NO_LIMIT":
             x = self.select_table(command[1], 0)
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "SELECT_LIMIT":
             x = self.select_table(command[1], command[2])
-            print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "SELECT_SPECIFIC_NO_LIMIT":
             x = self.select_specific(command[2], command[1], 0)
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "SELECT_SPECIFIC_LIMIT":
             x = self.select_specific(command[2], command[1], command[3])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "SELECT_WHERE_NO_LIMIT":
             x = self.select_where(command[1], command[2], 0)
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "SELECT_WHERE_LIMIT":
             x = self.select_where(command[1], command[2], command[3])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "CREATE_TABLE_SELECT_NO_LIMIT":
             x = self.create_table_select(command[1], command[2], 0)
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "CREATE_TABLE_SELECT_LIMIT":
             x = self.create_table_select(command[1], command[2], command[3])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "CREATE_TABLE_SELECT_WHERE_NO_LIMIT":
             x = self.create_table_select_where(command[1],command[2], command[3], 0)
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "CREATE_TABLE_SELECT_WHERE_LIMIT":
             x = self.create_table_select_where(command[1], command[2], command[3], command[4])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "PROCEDURE":
             x = self.store_procedure(command[1], command[2])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "CREATE_TABLE_FROM_JOIN":
             x = self.create_table_from_join(command[1], command[2], command[3], command[4])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
         elif cmd == "CALL":
             x = self.call_procedure(command[1])
-            if print_result == True: print(x)
+            if is_test == False: print(x)
             return x
 
     def import_table(self, table_name, filename):

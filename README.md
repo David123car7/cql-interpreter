@@ -32,7 +32,7 @@ The main goal is to allow users to perform data query and manipulation operation
    
 3. **Run the interpreter in Interactive Mode:**
    
-      ```bash
+    ```bash
    python cql_interpreter.py
 
 4. **Run the interpreter in File Mode:**
@@ -44,6 +44,17 @@ The main goal is to allow users to perform data query and manipulation operation
 
    ```bash
    ./venv/bin/python cql_interpreter.py
+
+
+## 🚀 How to Run Tests
+
+  1. **Test the Interpreter**
+   ```bash
+     
+
+  1. **Test the Interpreter**
+   ```bash
+   
 
 
 ## 💻 Language Syntax
