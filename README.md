@@ -53,17 +53,16 @@ The main goal is to allow users to perform data query and manipulation operation
 
 ## 💻 How to Run Tests
    
-   **Test the Interpreter**
+- **Test the Interpreter**
    ```bash
    python test/test_interpreter.py
    ```
    
-   **Test the Lexer**
+- **Test the Lexer**
    ```bash
    python test/test_lexer.py
    ```
-
-   **Test the Parser**
+- **Test the Parser**
    ```bash
    python test/test_parser.py
    ```
