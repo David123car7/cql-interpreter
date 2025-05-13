@@ -51,7 +51,7 @@ The main goal is to allow users to perform data query and manipulation operation
    ```
 
 
-## 🚀 How to Run Tests
+## 💻 How to Run Tests
    
    **Test the Interpreter**
    ```bash
