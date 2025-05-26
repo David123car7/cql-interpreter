@@ -44,13 +44,6 @@ The main goal is to allow users to perform data query and manipulation operation
    python cql_interpreter.py files/entrada.fca
       ```
 
-5. **If using Virtual Environment:**
-
-   ```bash
-   ./venv/bin/python cql_interpreter.py
-   ```
-
-
 ## 💻 How to Run Tests
    
 - **Test the Interpreter**
