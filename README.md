@@ -4,7 +4,7 @@ This project consists of developing an interpreter for the **CQL (Comma Query La
 > **Academic Context**  
 > This application was developed as part of the “Language Processing” course in the second year of the degree in Computer Systems Engineering (Licenciatura em Engenharia de Sistemas Informáticos) at Instituto Politécnico do Cávado e do Ave.
 
-## 📚 Description
+## Description
 
 The main goal is to allow users to perform data query and manipulation operations on CSV files using SQL-like commands. The features include:
 
@@ -13,12 +13,12 @@ The main goal is to allow users to perform data query and manipulation operation
 - **Table manipulation**: `CREATE TABLE`, `RENAME TABLE`, `DISCARD TABLE`
 - **Procedures**: defining and executing procedures with `PROCEDURE` and `CALL`
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - [Python](https://www.python.org/)
 - [PLY (Python Lex-Yacc)](https://www.dabeaz.com/ply/)
 
-## 🚀 How to Run
+## How to Run
 
 1. **Clone the repository:**
 
